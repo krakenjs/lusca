@@ -1,4 +1,4 @@
-# express-appsec
+# webcore-appsec
 
 Application security headers for Webcore.
 
