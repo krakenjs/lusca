@@ -25,7 +25,7 @@ describe('webcore-appsec', function () {
 	it('csp header (enforce)', function (done) {
 		request(server)
 			.get('/csp/enforce')
-			.expect('Content-Security-Policy', 'default-src *; reportUri http://www.example.com')
+			.expect('Content-Security-Policy', 'default-src *; ')
 			.expect(200, done);
 	});
 
