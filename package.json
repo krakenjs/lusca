@@ -1,0 +1,34 @@
+{
+  "name": "webcore-appsec",
+  "description": "Application security for webcore.",
+  "version": "0.0.1",
+  "homepage": "https://github.paypal.com/CoreUIE/webcore-appsec",
+  "author": {
+    "name": "Core UIE",
+    "email": "DL-PP-UIE-CoreTeam@paypal.com"
+  },
+  "contributors": [
+    {
+      "name": "Jeff Harrell",
+      "email": "jeharrell@paypal.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.paypal.com/CoreUIE/webcore-appsec.git"
+  },
+  "private": true,
+  "main": "index",
+  "scripts": {
+    "test": "node ./node_modules/.bin/mocha ./test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*",
+    "express": "~3.1.0"
+  },
+  "engines": {
+    "node": "0.8.x"
+  }
+}
