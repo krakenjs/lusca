@@ -22,7 +22,9 @@
   "scripts": {
     "test": "node ./node_modules/.bin/mocha ./test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "supertest": "~0.5.1"
+  },
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
