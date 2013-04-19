@@ -1,10 +1,16 @@
 'use strict';
 
-var express = require('express'),
-	appsec = require('../../index'),
-	server = express(),
-	cspPolicyReport = require('./cspPolicyReport'),
-	cspPolicyEnforce = require('./cspPolicyEnforce');
+var express = require('express');
+var appsec = require('../../index');
+var server = express();
+var cspPolicyReport = require('./cspPolicyReport');
+var cspPolicyEnforce = require('./cspPolicyEnforce');
+var allConfig = {
+	csrf: true,
+	xframe: 'SAMEORIGIN',
+	p3p: 'MY_P3P_VALUE',
+	csp: cspPolicyReport
+};
 
 
 
@@ -25,6 +31,10 @@ server.get('/csp/report', appsec.csp(cspPolicyReport), function (req, res, next)
 });
 
 server.get('/csp/enforce', appsec.csp(cspPolicyEnforce), function (req, res, next) {
+	res.send(200);
+});
+
+server.get('/all', appsec(allConfig), function (req, res, next) {
 	res.send(200);
 });
 
