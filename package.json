@@ -22,16 +22,14 @@
   "scripts": {
     "test": "node ./node_modules/.bin/mocha ./test"
   },
-  "dependencies": {
-    "supertest": "~0.5.1"
-  },
   "peerDependencies": {
   	"express": "*"
   },
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
-    "express": "*"
+    "express": "*",
+    "supertest": "~0.5.1"
   },
   "engines": {
     "node": "0.8.x"
