@@ -9,7 +9,19 @@ var express = require('express'),
 	appsec = require('webcore-appsec'),
 	server = express();
 
+server.use(appsec.csp({ /* ... */}));
 server.use(appsec.xframe('SAMEORIGIN'));
+server.use(appsec.p3p('ABCDEF'));
+```
+
+Or you can opt in to all purely by config:
+
+```js
+server.use(appsec({
+    csp: { /* ... */},
+    xframe: 'SAMEORIGIN',
+    p3p: 'ABCDEF' 
+}));
 ```
 
 # appsec.csp(options)

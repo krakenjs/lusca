@@ -10,9 +10,21 @@ var appsec = require('../index'),
 
 
 describe('webcore-appsec', function () {
+	it('all method', function () {
+		expect(appsec).to.be.a('function');
+	});
+
+	it('all headers', function (done) {
+		request(server)
+			.get('/all')
+			.expect('X-FRAME-OPTIONS', 'SAMEORIGIN')
+			.expect('P3P', 'MY_P3P_VALUE')
+			.expect('Content-Security-Policy-Report-Only', 'default-src *; reportUri http://www.example.com')
+			.expect(200, done);
+	});
+
     it('csp method', function () {
 		expect(appsec.csp).to.be.a('function');
-
     });
 
     it('csp header (report)', function (done) {
