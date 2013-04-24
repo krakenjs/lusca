@@ -17,7 +17,9 @@
     "type": "git",
     "url": "git://github.paypal.com/CoreUIE/webcore-appsec.git"
   },
-  "private": true,
+  "publishConfig": {
+      "registry": "http://npm.paypal.com"
+  },
   "main": "index",
   "scripts": {
     "test": "node ./node_modules/.bin/mocha ./test"
