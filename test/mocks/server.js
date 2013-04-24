@@ -13,7 +13,12 @@ var allConfig = {
 };
 
 
+// Server setup
+server.use(express.cookieParser());
+server.use(express.session({ secret: 'abc' }));
+server.use(express.bodyParser());
 
+// Server routes
 server.get('/xframe/deny', appsec.xframe('DENY'), function (req, res, next) {
 	res.send(200);
 });
@@ -32,6 +37,10 @@ server.get('/csp/report', appsec.csp(cspPolicyReport), function (req, res, next)
 
 server.get('/csp/enforce', appsec.csp(cspPolicyEnforce), function (req, res, next) {
 	res.send(200);
+});
+
+server.all('/csrf', appsec.csrf(), function (req, res, next) {
+	res.json(200, { token: res.locals._csrf });
 });
 
 server.get('/all', appsec(allConfig), function (req, res, next) {

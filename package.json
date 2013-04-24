@@ -1,7 +1,7 @@
 {
   "name": "webcore-appsec",
   "description": "Application security for webcore.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.paypal.com/CoreUIE/webcore-appsec",
   "author": {
     "name": "Core UIE",
@@ -25,10 +25,13 @@
   "dependencies": {
     "supertest": "~0.5.1"
   },
+  "peerDependencies": {
+  	"express": "*"
+  },
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
-    "express": "~3.1.0"
+    "express": "*"
   },
   "engines": {
     "node": "0.8.x"

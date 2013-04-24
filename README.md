@@ -9,6 +9,7 @@ var express = require('express'),
 	appsec = require('webcore-appsec'),
 	server = express();
 
+server.use(appsec.csrf());
 server.use(appsec.csp({ /* ... */}));
 server.use(appsec.xframe('SAMEORIGIN'));
 server.use(appsec.p3p('ABCDEF'));
@@ -18,11 +19,19 @@ Or you can opt in to all purely by config:
 
 ```js
 server.use(appsec({
+	csrf: true,
     csp: { /* ... */},
     xframe: 'SAMEORIGIN',
     p3p: 'ABCDEF' 
 }));
 ```
+
+# appsec.csrf()
+
+Enables [Cross Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_\(CSRF\)) (CSRF) headers.
+
+If enabled, the CSRF token must be in the payload when modifying data or you will receive a *403 Forbidden*. To send the token you'll need to echo back the `_csrf` value you received from the previous request.
+
 
 # appsec.csp(options)
 

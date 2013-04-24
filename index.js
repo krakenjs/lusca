@@ -1,5 +1,7 @@
 'use strict';
 
+var express = require('express');
+
 
 /**
  * Outputs all security headers based on configuration
@@ -10,6 +12,10 @@ var appsec = module.exports = function (options) {
 
 	if (options.csp) {
 		headers.push(appsec.csp(options.csp));
+	}
+
+	if (options.csrf) {
+		headers.push(appsec.csrf());
 	}
 
 	if (options.xframe) {
@@ -35,7 +41,7 @@ var appsec = module.exports = function (options) {
  * https://www.owasp.org/index.php/Content_Security_Policy
  * @param {Object} options The CSP policy.
  */
-appsec.csp = function csp (options) {
+appsec.csp = function csp(options) {
 	var	policyRules = options && options.policy,
 		isReportOnly = options && options.reportOnly,
 		reportUri = options && options.reportUri,
@@ -64,11 +70,33 @@ appsec.csp = function csp (options) {
 
 
 /**
+ * CSRF
+ * https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
+ */
+appsec.csrf = function csrf(value) {
+	var csrfExpress = express.csrf();
+
+	return function (req, res, next) {
+		var session = req.session;
+
+		if (session) {
+			csrfExpress(req, res, function (err) {
+				res.locals._csrf = session._csrf;
+				next && next(err);
+			});
+		} else {
+			next && next();
+		}
+	};
+};
+
+
+/**
  * Xframes
  * https://www.owasp.org/index.php/Clickjacking
  * @param {String} value The XFRAME header value, e.g. DENY, SAMEORIGIN.
  */
-appsec.xframe = function xframe (value) {
+appsec.xframe = function xframe(value) {
 	return function (req, res, next) {
 		res.header('X-FRAME-OPTIONS', value);
 		next && next();
@@ -81,7 +109,7 @@ appsec.xframe = function xframe (value) {
  * http://support.microsoft.com/kb/290333
  * @param {String} value The P3P header value.
  */
-appsec.p3p = function p3p (value) {
+appsec.p3p = function p3p(value) {
 	return function (req, res, next) {
 		res.header('P3P', value);
 		next && next();
