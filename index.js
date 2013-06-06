@@ -27,11 +27,21 @@ var appsec = module.exports = function (options) {
 	}
 
 	return function (req, res, next) {
+        var chain = next;
+
 		headers.forEach(function (header) {
-			header(req, res);
+            chain = (function (next) {
+                return function (err) {
+                    if (err) {
+                        next(err);
+                        return;
+                    }
+                    header(req, res, next);
+                }
+            }(chain));
 		});
 
-		next();
+		chain();
 	};
 };
 
@@ -48,11 +58,11 @@ appsec.csp = function csp(options) {
 		value = "",
 		name, key;
 
+    name = 'Content-Security-Policy';
 	if (isReportOnly) {
-		name = 'Content-Security-Policy-Report-Only';
-	} else {
-		name = 'Content-Security-Policy';
+		name += '-Report-Only';
 	}
+
 
 	for (key in policyRules) {
 		value += key + " " + policyRules[key] + "; ";
@@ -64,7 +74,7 @@ appsec.csp = function csp(options) {
 
 	return function (req, res, next) {
 		res.header(name, value);
-		next && next();
+		next();
 	};
 };
 
@@ -77,16 +87,14 @@ appsec.csrf = function csrf(value) {
 	var csrfExpress = express.csrf();
 
 	return function (req, res, next) {
-		var session = req.session;
-
-		if (session) {
+		if (req.session) {
 			csrfExpress(req, res, function (err) {
-				res.locals._csrf = session._csrf;
-				next && next(err);
+				res.locals._csrf = req.session._csrf;
+				next(err);
 			});
-		} else {
-			next && next();
+            return;
 		}
+        next();
 	};
 };
 
@@ -99,7 +107,7 @@ appsec.csrf = function csrf(value) {
 appsec.xframe = function xframe(value) {
 	return function (req, res, next) {
 		res.header('X-FRAME-OPTIONS', value);
-		next && next();
+		next();
 	};
 };
 
@@ -112,7 +120,7 @@ appsec.xframe = function xframe(value) {
 appsec.p3p = function p3p(value) {
 	return function (req, res, next) {
 		res.header('P3P', value);
-		next && next();
+		next();
 	};
 };
 
