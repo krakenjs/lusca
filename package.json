@@ -24,6 +24,8 @@
   "scripts": {
     "test": "node ./node_modules/.bin/mocha ./test"
   },
+  "dependencies": {
+  },
   "peerDependencies": {
   	"express": "*"
   },
