@@ -1,12 +1,12 @@
-# webcore-appsec
+# express-appsec
 
-Application security headers for Webcore.
+Application security for express.
 
 # methods
 
 ```js
 var express = require('express'),
-	appsec = require('webcore-appsec'),
+	appsec = require('express-appsec'),
 	server = express();
 
 server.use(appsec.csrf());
@@ -19,7 +19,7 @@ Or you can opt in to all purely by config:
 
 ```js
 server.use(appsec({
-	csrf: true,
+    csrf: true,
     csp: { /* ... */},
     xframe: 'SAMEORIGIN',
     p3p: 'ABCDEF' 
