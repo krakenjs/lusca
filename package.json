@@ -1,8 +1,8 @@
 {
-  "name": "webcore-appsec",
-  "description": "Application security for webcore.",
-  "version": "0.0.2",
-  "homepage": "https://github.paypal.com/CoreUIE/webcore-appsec",
+  "name": "expess-appsec",
+  "description": "Application security for express.",
+  "version": "0.1",
+  "homepage": "https://github.paypal.com/webcore/express-appsec",
   "author": {
     "name": "Core UIE",
     "email": "DL-PP-UIE-CoreTeam@paypal.com"
@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.paypal.com/CoreUIE/webcore-appsec.git"
+    "url": "git://github.paypal.com/webcore/express-appsec.git"
   },
   "publishConfig": {
       "registry": "http://npm.paypal.com"
