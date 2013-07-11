@@ -1,7 +1,7 @@
 {
   "name": "expess-appsec",
   "description": "Application security for express.",
-  "version": "0.1",
+  "version": "0.1.0",
   "homepage": "https://github.paypal.com/webcore/express-appsec",
   "author": {
     "name": "Core UIE",
