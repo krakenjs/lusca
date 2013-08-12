@@ -10,6 +10,8 @@ var express = require('express');
 var appsec = module.exports = function (options) {
 	var headers = [];
 
+    options = options || {};
+
 	if (options.csp) {
 		headers.push(appsec.csp(options.csp));
 	}
@@ -83,7 +85,7 @@ appsec.csp = function csp(options) {
  * CSRF
  * https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
  */
-appsec.csrf = function csrf(value) {
+appsec.csrf = function csrf() {
 	var csrfExpress = express.csrf();
 
 	return function (req, res, next) {
