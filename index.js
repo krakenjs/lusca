@@ -8,30 +8,30 @@ var express = require('express');
  * @param {Object} options The configuration object.
  */
 var appsec = module.exports = function (options) {
-	var headers = [];
+    var headers = [];
 
     options = options || {};
 
-	if (options.csp) {
-		headers.push(appsec.csp(options.csp));
-	}
+    if (options.csp) {
+        headers.push(appsec.csp(options.csp));
+    }
 
-	if (options.csrf) {
-		headers.push(appsec.csrf());
-	}
+    if (options.csrf) {
+        headers.push(appsec.csrf());
+    }
 
-	if (options.xframe) {
-		headers.push(appsec.xframe(options.xframe));
-	}
+    if (options.xframe) {
+        headers.push(appsec.xframe(options.xframe));
+    }
 
-	if (options.p3p) {
-		headers.push(appsec.p3p(options.p3p));
-	}
+    if (options.p3p) {
+        headers.push(appsec.p3p(options.p3p));
+    }
 
-	return function (req, res, next) {
+    return function (req, res, next) {
         var chain = next;
 
-		headers.forEach(function (header) {
+        headers.forEach(function (header) {
             chain = (function (next) {
                 return function (err) {
                     if (err) {
@@ -41,10 +41,10 @@ var appsec = module.exports = function (options) {
                     header(req, res, next);
                 }
             }(chain));
-		});
+        });
 
-		chain();
-	};
+        chain();
+    };
 };
 
 
@@ -54,30 +54,30 @@ var appsec = module.exports = function (options) {
  * @param {Object} options The CSP policy.
  */
 appsec.csp = function csp(options) {
-	var	policyRules = options && options.policy,
-		isReportOnly = options && options.reportOnly,
-		reportUri = options && options.reportUri,
-		value = "",
-		name, key;
+    var    policyRules = options && options.policy,
+        isReportOnly = options && options.reportOnly,
+        reportUri = options && options.reportUri,
+        value = "",
+        name, key;
 
     name = 'Content-Security-Policy';
-	if (isReportOnly) {
-		name += '-Report-Only';
-	}
+    if (isReportOnly) {
+        name += '-Report-Only';
+    }
 
 
-	for (key in policyRules) {
-		value += key + " " + policyRules[key] + "; ";
-	}
+    for (key in policyRules) {
+        value += key + " " + policyRules[key] + "; ";
+    }
 
-	if (reportUri) {
-		value += "reportUri " + reportUri;
-	}
+    if (reportUri) {
+        value += "reportUri " + reportUri;
+    }
 
-	return function (req, res, next) {
-		res.header(name, value);
-		next();
-	};
+    return function (req, res, next) {
+        res.header(name, value);
+        next();
+    };
 };
 
 
@@ -86,18 +86,18 @@ appsec.csp = function csp(options) {
  * https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
  */
 appsec.csrf = function csrf() {
-	var csrfExpress = express.csrf();
+    var csrfExpress = express.csrf();
 
-	return function (req, res, next) {
-		if (req.session) {
-			csrfExpress(req, res, function (err) {
-				res.locals._csrf = req.session._csrf;
-				next(err);
-			});
+    return function (req, res, next) {
+        if (req.session) {
+            csrfExpress(req, res, function (err) {
+                res.locals._csrf = req.session._csrf;
+                next(err);
+            });
             return;
-		}
+        }
         next();
-	};
+    };
 };
 
 
@@ -107,10 +107,10 @@ appsec.csrf = function csrf() {
  * @param {String} value The XFRAME header value, e.g. DENY, SAMEORIGIN.
  */
 appsec.xframe = function xframe(value) {
-	return function (req, res, next) {
-		res.header('X-FRAME-OPTIONS', value);
-		next();
-	};
+    return function (req, res, next) {
+        res.header('X-FRAME-OPTIONS', value);
+        next();
+    };
 };
 
 
@@ -120,10 +120,10 @@ appsec.xframe = function xframe(value) {
  * @param {String} value The P3P header value.
  */
 appsec.p3p = function p3p(value) {
-	return function (req, res, next) {
-		res.header('P3P', value);
-		next();
-	};
+    return function (req, res, next) {
+        res.header('P3P', value);
+        next();
+    };
 };
 
 
