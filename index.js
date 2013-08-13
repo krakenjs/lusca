@@ -39,7 +39,7 @@ var appsec = module.exports = function (options) {
                         return;
                     }
                     header(req, res, next);
-                }
+                };
             }(chain));
         });
 
