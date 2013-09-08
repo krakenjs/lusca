@@ -21,7 +21,7 @@
     "mocha": "~1.12.0",
     "jshint": "*",
     "supertest": "~0.5.1",
-    "express": "~3.3.4"
+    "express": "~3.4"
   },
   "engines": {
     "node": "0.8.x"
