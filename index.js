@@ -54,7 +54,7 @@ var appsec = module.exports = function (options) {
  * @param {Object} options The CSP policy.
  */
 appsec.csp = function csp(options) {
-    var    policyRules = options && options.policy,
+    var policyRules = options && options.policy,
         isReportOnly = options && options.reportOnly,
         reportUri = options && options.reportUri,
         value = "",
@@ -91,7 +91,7 @@ appsec.csrf = function csrf() {
     return function (req, res, next) {
         if (req.session) {
             csrfExpress(req, res, function (err) {
-                res.locals._csrf = req.session._csrf;
+                res.locals._csrf = (typeof req.csrfToken === 'function') ? req.csrfToken() : req.session._csrf;
                 next(err);
             });
             return;

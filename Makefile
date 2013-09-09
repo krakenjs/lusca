@@ -11,4 +11,3 @@ lint:
 	$(JSHINT) ./index.js --config $(BASE)/.jshintrc
 
 .PHONY: test
-
