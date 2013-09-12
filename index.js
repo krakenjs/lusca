@@ -28,7 +28,7 @@ var appsec = module.exports = function (options) {
         headers.push(appsec.p3p(options.p3p));
     }
 
-    return function (req, res, next) {
+    return function appsec(req, res, next) {
         var chain = next;
 
         headers.forEach(function (header) {
@@ -74,7 +74,7 @@ appsec.csp = function csp(options) {
         value += "reportUri " + reportUri;
     }
 
-    return function (req, res, next) {
+    return function csp(req, res, next) {
         res.header(name, value);
         next();
     };
@@ -88,7 +88,7 @@ appsec.csp = function csp(options) {
 appsec.csrf = function csrf() {
     var csrfExpress = express.csrf();
 
-    return function (req, res, next) {
+    return function csrf(req, res, next) {
         if (req.session) {
             csrfExpress(req, res, function (err) {
                 res.locals._csrf = (typeof req.csrfToken === 'function') ? req.csrfToken() : req.session._csrf;
@@ -107,7 +107,7 @@ appsec.csrf = function csrf() {
  * @param {String} value The XFRAME header value, e.g. DENY, SAMEORIGIN.
  */
 appsec.xframe = function xframe(value) {
-    return function (req, res, next) {
+    return function xframe(req, res, next) {
         res.header('X-FRAME-OPTIONS', value);
         next();
     };
@@ -120,7 +120,7 @@ appsec.xframe = function xframe(value) {
  * @param {String} value The P3P header value.
  */
 appsec.p3p = function p3p(value) {
-    return function (req, res, next) {
+    return function p3p(req, res, next) {
         res.header('P3P', value);
         next();
     };
