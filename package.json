@@ -2,6 +2,12 @@
   "name": "express-appsec",
   "description": "Application security for express.",
   "version": "0.1.1",
+  "licenses": [
+    {
+      "type": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  ],  
   "author": {
     "name": "Jeff Harrell",
     "email": "jeharrell@paypal.com"
