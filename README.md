@@ -1,4 +1,4 @@
-# express-appsec
+# lusca
 
 Application security for express.
 
@@ -6,7 +6,7 @@ Application security for express.
 
 ```js
 var express = require('express'),
-	appsec = require('express-appsec'),
+	appsec = require('lusca'),
 	server = express();
 
 server.use(appsec.csrf());
