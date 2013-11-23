@@ -13,7 +13,7 @@
         "email": "jeharrell@paypal.com"
     },
     "publishConfig": {
-        "registry": "http://npm.paypal.com"
+        "registry": "https://registry.npmjs.org"
     },
     "main": "index",
     "scripts": {
