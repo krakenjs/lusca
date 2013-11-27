@@ -1,13 +1,15 @@
 {
     "name": "lusca",
+    "version": "0.1.2",
     "description": "Application security for express.",
-    "version": "0.1.1",
-    "licenses": [
-        {
-            "type": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        }
-    ],
+    "main": "index",
+    "scripts": {
+        "test": "grunt test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/paypal/lusca.git"
+    },
     "author": {
         "name": "Jeff Harrell",
         "email": "jeharrell@paypal.com"
@@ -15,9 +17,14 @@
     "publishConfig": {
         "registry": "https://registry.npmjs.org"
     },
-    "main": "index",
-    "scripts": {
-        "test": "node ./node_modules/.bin/mocha ./test"
+    "licenses": [
+        {
+            "type": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    ],
+    "engines": {
+        "node": ">=0.8.x"
     },
     "peerDependencies": {
         "express": "*"
@@ -27,13 +34,9 @@
         "mocha": "~1.12.0",
         "jshint": "*",
         "supertest": "~0.5.1",
-        "express": "~3.4"
-    },
-    "engines": {
-        "node": ">=0.8.x"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/paypal/lusca.git"
+        "express": "~3.4",
+        "grunt": "~0.4.1",
+        "grunt-contrib-jshint": "~0.7.0",
+        "grunt-mocha-test": "~0.7.0"
     }
 }
