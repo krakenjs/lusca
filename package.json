@@ -26,6 +26,7 @@
     "engines": {
         "node": ">=0.8.x"
     },
+    "engineStrict": true,
     "peerDependencies": {
         "express": "*"
     },
