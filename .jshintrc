@@ -1,6 +1,5 @@
 {
-    
-// Whether the scan should stop on first error.
+    // Whether the scan should stop on first error.
     "passfail": false,
     // Maximum errors before stopping.
     "maxerr": 100,
