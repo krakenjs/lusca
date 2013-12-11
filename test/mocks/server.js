@@ -6,7 +6,10 @@ var server = express();
 var cspPolicyReport = require('./cspPolicyReport');
 var cspPolicyEnforce = require('./cspPolicyEnforce');
 var allConfig = {
-	csrf: true,
+	csrf: {
+        enabled: true,
+        ignore: ['/allowed', '/allowed/complex/path']
+    },
 	xframe: 'SAMEORIGIN',
 	p3p: 'MY_P3P_VALUE',
 	csp: cspPolicyReport
@@ -40,6 +43,14 @@ server.get('/csp/enforce', appsec.csp(cspPolicyEnforce), function (req, res, nex
 });
 
 server.all('/csrf', appsec.csrf(), function (req, res, next) {
+	res.json(200, { token: res.locals._csrf });
+});
+
+server.all('/allowed', appsec.csrf(allConfig.csrf), function (req, res, next) {
+	res.json(200, { token: res.locals._csrf });
+});
+
+server.all('/allowed/complex/:id/', appsec.csrf(allConfig.csrf), function (req, res, next) {
 	res.json(200, { token: res.locals._csrf });
 });
 

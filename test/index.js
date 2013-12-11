@@ -61,6 +61,30 @@ describe('CSRF', function () {
 				done();
 			});
 	});
+
+    /**
+     * Certain paths can be set to be ignored via configuration file
+     */
+    it('Should allow access to an allowed path', function (done) {
+        request(server)
+            .post('/allowed')
+            .expect(200)
+            .end(function (err, res) {
+                done(err);
+            });
+    });
+
+    /**
+     * Certain paths can be set to be ignored via configuration file
+     */
+    it('Should allow access to an allowed complex path', function (done) {
+        request(server)
+            .post('/allowed/complex/path')
+            .expect(200)
+            .end(function (err, res) {
+                done(err);
+            });
+    });
 });
 
 
