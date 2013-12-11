@@ -79,12 +79,13 @@ describe('CSRF', function () {
      */
     it('Should allow access to an allowed complex path', function (done) {
         request(server)
-            .post('/allowed/complex/path')
+            .post('/complex/allowed/path')
             .expect(200)
             .end(function (err, res) {
                 done(err);
             });
     });
+     //*/
 });
 
 

@@ -19,14 +19,18 @@ Or you can opt in to all purely by config:
 
 ```js
 server.use(appsec({
-    csrf: true,
+    csrf: {
+        ignore:['/path/to/ignore', '/when/:applying/csrf']  // Optional
+    },
     csp: { /* ... */},
     xframe: 'SAMEORIGIN',
     p3p: 'ABCDEF' 
 }));
 ```
 
-# appsec.csrf()
+# appsec.csrf([options])
+
+* `options.ignore` Array - Paths to ignore when applying the CSRF policy. If not present, CSRF will be applied to all paths. Express-style paths are supported (eg: `/path/:with/parameters`)
 
 Enables [Cross Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_\(CSRF\)) (CSRF) headers.
 

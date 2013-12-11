@@ -35,8 +35,9 @@ var appsec = module.exports = function (options) {
         headers.push(appsec.csp(options.csp));
     }
 
-    if (options.csrf) {
-        headers.push(appsec.csrf());
+    //Maintains backwards compatibility with original boolean value for options.csrf
+    if (options.csrf === true || typeof options.csrf === 'object') {
+        headers.push(appsec.csrf(options.csrf));
     }
 
     if (options.xframe) {
@@ -104,11 +105,37 @@ appsec.csp = function csp(options) {
  * CSRF
  * https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
  */
-appsec.csrf = function csrf() {
-    var csrfExpress = express.csrf();
+appsec.csrf = function csrf(options) {
+
+
+    var csrfExpress = express.csrf(),
+        ignorePaths = [];
+
+    if (typeof options === 'object') {
+        if (options.ignore && options.ignore instanceof Array) {
+            for (var i in options.ignore) {
+                //This substitution allows for matching express paths with parameters.
+                //If I want to ignore "/a/path/:with/parameters"
+                //This will create a RegExp: "^/a/path/[^/]+/parameters" to test against.
+                ignorePaths.push(new RegExp('^' + options.ignore[i].replace(/:[^\/]+/g, '[^/]+')));
+            }
+        }
+        else {
+            console.warn('Error in CSRF configuration: Expected an Array for ignored paths. CSRF will be used on all paths.');
+        }
+    }
 
     return function csrf(req, res, next) {
         if (req.session) {
+
+            //Skip any paths set to be ignored
+            for (var i in ignorePaths) {
+                if (ignorePaths[i].test(req.path)) {
+                    next();
+                    return;
+                }
+            }
+
             csrfExpress(req, res, function (err) {
                 res.locals._csrf = (typeof req.csrfToken === 'function') ? req.csrfToken() : req.session._csrf;
                 next(err);

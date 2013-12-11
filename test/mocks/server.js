@@ -7,8 +7,7 @@ var cspPolicyReport = require('./cspPolicyReport');
 var cspPolicyEnforce = require('./cspPolicyEnforce');
 var allConfig = {
 	csrf: {
-        enabled: true,
-        ignore: ['/allowed', '/allowed/complex/path']
+        ignore: ['/allowed', '/complex/allowed/:path']
     },
 	xframe: 'SAMEORIGIN',
 	p3p: 'MY_P3P_VALUE',
@@ -50,7 +49,7 @@ server.all('/allowed', appsec.csrf(allConfig.csrf), function (req, res, next) {
 	res.json(200, { token: res.locals._csrf });
 });
 
-server.all('/allowed/complex/:id/', appsec.csrf(allConfig.csrf), function (req, res, next) {
+server.all('/complex/allowed/:id', appsec.csrf(allConfig.csrf), function (req, res, next) {
 	res.json(200, { token: res.locals._csrf });
 });
 
