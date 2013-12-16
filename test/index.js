@@ -36,7 +36,7 @@ describe('CSRF', function () {
 			.expect(200)
 			.end(function (err, res) {
 				expect(res.body.token).to.have.length.above(0);
-				done();
+				done(err);
 			});
 	});
 
@@ -58,7 +58,7 @@ describe('CSRF', function () {
 			.post('/csrf')
 			.expect(403)
 			.end(function (err, res) {
-				done();
+				done(err);
 			});
 	});
 });
