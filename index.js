@@ -1,21 +1,21 @@
 /***@@@ BEGIN LICENSE @@@***/
 /*───────────────────────────────────────────────────────────────────────────*\
-│  Copyright (C) 2013 eBay Software Foundation                                │
-│                                                                             │
-│hh ,'""`.                                                                    │
-│  / _  _ \  Licensed under the Apache License, Version 2.0 (the "License");  │
-│  |(@)(@)|  you may not use this file except in compliance with the License. │
-│  )  __  (  You may obtain a copy of the License at                          │
-│ /,'))((`.\                                                                  │
-│(( ((  )) ))    http://www.apache.org/licenses/LICENSE-2.0                   │
-│ `\ `)(' /'                                                                  │
-│                                                                             │
-│   Unless required by applicable law or agreed to in writing, software       │
-│   distributed under the License is distributed on an "AS IS" BASIS,         │
-│   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  │
-│   See the License for the specific language governing permissions and       │
-│   limitations under the License.                                            │
-\*───────────────────────────────────────────────────────────────────────────*/
+ │  Copyright (C) 2013 eBay Software Foundation                                │
+ │                                                                             │
+ │hh ,'""`.                                                                    │
+ │  / _  _ \  Licensed under the Apache License, Version 2.0 (the "License");  │
+ │  |(@)(@)|  you may not use this file except in compliance with the License. │
+ │  )  __  (  You may obtain a copy of the License at                          │
+ │ /,'))((`.\                                                                  │
+ │(( ((  )) ))    http://www.apache.org/licenses/LICENSE-2.0                   │
+ │ `\ `)(' /'                                                                  │
+ │                                                                             │
+ │   Unless required by applicable law or agreed to in writing, software       │
+ │   distributed under the License is distributed on an "AS IS" BASIS,         │
+ │   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  │
+ │   See the License for the specific language governing permissions and       │
+ │   limitations under the License.                                            │
+ \*───────────────────────────────────────────────────────────────────────────*/
 /***@@@ END LICENSE @@@***/
 'use strict';
 
@@ -36,7 +36,7 @@ var appsec = module.exports = function (options) {
     }
 
     //Maintains backwards compatibility with original boolean value for options.csrf
-    if (options.csrf === true || typeof options.csrf === 'object') {
+    if (options.csrf === true || (typeof options.csrf === 'object' && options.csrf !== null)) {
         headers.push(appsec.csrf(options.csrf));
     }
 
@@ -111,8 +111,8 @@ appsec.csrf = function csrf(options) {
     var csrfExpress = express.csrf(),
         ignorePaths = [];
 
-    if (typeof options === 'object') {
-        if (options.ignore && options.ignore instanceof Array) {
+    if (typeof options === 'object' && options !== null && options.ignore) {
+        if (options.ignore instanceof Array) {
             for (var i in options.ignore) {
                 //This substitution allows for matching express paths with parameters.
                 //If I want to ignore "/a/path/:with/parameters"
@@ -128,6 +128,7 @@ appsec.csrf = function csrf(options) {
     return function csrf(req, res, next) {
         if (req.session) {
 
+            // console.log('route', req.route);
             //Skip any paths set to be ignored
             for (var i in ignorePaths) {
                 if (ignorePaths[i].test(req.path)) {
