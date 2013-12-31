@@ -9,6 +9,7 @@ var allConfig = {
 	csrf: true,
 	xframe: 'SAMEORIGIN',
 	p3p: 'MY_P3P_VALUE',
+	hsts: {maxAge: 31536000},
 	csp: cspPolicyReport
 };
 
@@ -24,6 +25,22 @@ server.get('/xframe/deny', appsec.xframe('DENY'), function (req, res, next) {
 });
 
 server.get('/xframe/sameorigin', appsec.xframe('SAMEORIGIN'), function (req, res, next) {
+	res.send(200);
+});
+
+server.get('/hsts', appsec.hsts({maxAge: 31536000}), function (req, res, next) {
+	res.send(200);
+});
+
+server.get('/hsts0', appsec.hsts({maxAge: 0}), function (req, res, next) {
+	res.send(200);
+});
+
+server.get('/hsts/subdomains', appsec.hsts({maxAge: 31536000, includeSubDomains: true}), function (req, res, next) {
+	res.send(200);
+});
+
+server.get('/hsts/missing', appsec.hsts({}), function (req, res, next) {
 	res.send(200);
 });
 

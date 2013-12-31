@@ -13,6 +13,7 @@ server.use(appsec.csrf());
 server.use(appsec.csp({ /* ... */}));
 server.use(appsec.xframe('SAMEORIGIN'));
 server.use(appsec.p3p('ABCDEF'));
+server.use(appsec.hsts({maxAge: 31536000});
 ```
 
 Or you can opt in to all purely by config:
@@ -22,7 +23,8 @@ server.use(appsec({
     csrf: true,
     csp: { /* ... */},
     xframe: 'SAMEORIGIN',
-    p3p: 'ABCDEF' 
+    p3p: 'ABCDEF',
+    hsts: {maxAge: 31536000, includeSubDomains: true}
 }));
 ```
 
@@ -56,3 +58,10 @@ Enables X-FRAME-OPTIONS headers to help prevent [Clickjacking](https://www.owasp
 * `value` String - The compact privacy policy.
 
 Enables [Platform for Privacy Preferences Project](http://support.microsoft.com/kb/290333) (P3P) headers.
+
+# appsec.hsts(options)
+
+* `options.maxAge` Number - Required, number of seconds HSTS is in effect. A value of zero cancels HSTS for the domain.
+* `options.includeSubDomains` boolean - If provided and true, apply HSTS to all subdomains of this host
+
+Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_Strict_Transport_Security) for the host domain.
