@@ -19,6 +19,7 @@ describe('All', function () {
 			.get('/all')
 			.expect('X-FRAME-OPTIONS', 'SAMEORIGIN')
 			.expect('P3P', 'MY_P3P_VALUE')
+			.expect('Strict-Transport-Security', 'max-age=31536000')
 			.expect('Content-Security-Policy-Report-Only', 'default-src *; reportUri http://www.example.com')
 			.expect(200, done);
 	});
@@ -106,6 +107,45 @@ describe('XFRAME', function () {
 	});
 });
 
+
+describe('HSTS', function () {
+    it('method', function (done) {
+		expect(appsec.hsts).to.be.a('function');
+		done();
+    });
+
+	it('header (maxAge)', function (done) {
+		request(server)
+			.get('/hsts')
+			.expect('Strict-Transport-Security', 'max-age=31536000')
+			.expect(200, done);
+	});
+
+	it('header (maxAge 0)', function (done) {
+		request(server)
+			.get('/hsts0')
+			.expect('Strict-Transport-Security', 'max-age=0')
+			.expect(200, done);
+	});
+
+	it('header (maxAge; includeSubDomains)', function (done) {
+		request(server)
+			.get('/hsts/subdomains')
+			.expect('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
+			.expect(200, done);
+	});
+
+	it('header (missing maxAge)', function (done) {
+		request(server)
+			.get('/hsts/missing')
+			.expect(200)
+	                .end(function (err, res) {
+				expect(res.headers['Strict-Transport-Security']).to.not.exist;
+				done(err);
+			});
+
+	});
+});
 
 describe('P3P', function () {
     it('method', function (done) {

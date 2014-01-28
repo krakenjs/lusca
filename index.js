@@ -47,6 +47,10 @@ var appsec = module.exports = function (options) {
         headers.push(appsec.p3p(options.p3p));
     }
 
+    if (options.hsts) {
+        headers.push(appsec.hsts(options.hsts));
+    }
+
     return function appsec(req, res, next) {
         var chain = next;
 
@@ -128,6 +132,31 @@ appsec.csrf = function csrf() {
 appsec.xframe = function xframe(value) {
     return function xframe(req, res, next) {
         res.header('X-FRAME-OPTIONS', value);
+        next();
+    };
+};
+
+/**
+ * HSTS - Http Strict Transport Security
+ * https://www.owasp.org/index.php/HTTP_Strict_Transport_Security
+ * @param {Object} options The HSTS options {maxAge: nnnn; includeSubDomains: boolean}
+ *     maxAge is required. If missing, the header will not be emitted.
+ *     If includeSubDomains is omitted or false, it will be omitted from the header.
+ */
+appsec.hsts = function hsts(options) {
+    var maxAge = options && options.maxAge,
+        includeSubDomains = options && options.includeSubDomains,
+        value;
+    
+    if (maxAge || maxAge === 0) {
+        value = 'max-age=' + maxAge;
+        value += includeSubDomains ? '; includeSubDomains' : '';
+        return function hsts(req, res, next) {
+            res.header('Strict-Transport-Security', value);
+            next();
+        };
+    }
+    return function hsts(req, res, next) {
         next();
     };
 };
