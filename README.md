@@ -6,36 +6,36 @@ Application security for express.
 
 ```js
 var express = require('express'),
-	appsec = require('lusca'),
+	lusca = require('lusca'),
 	server = express();
 
-server.use(appsec.csrf());
-server.use(appsec.csp({ /* ... */}));
-server.use(appsec.xframe('SAMEORIGIN'));
-server.use(appsec.p3p('ABCDEF'));
-server.use(appsec.hsts({maxAge: 31536000});
+server.use(lusca.csrf());
+server.use(lusca.csp({ /* ... */}));
+server.use(lusca.xframe('SAMEORIGIN'));
+server.use(lusca.p3p('ABCDEF'));
+server.use(lusca.hsts({maxAge: 31536000});
 ```
 
 Or you can opt in to all purely by config:
 
 ```js
-server.use(appsec({
+server.use(lusca({
     csrf: true,
     csp: { /* ... */},
     xframe: 'SAMEORIGIN',
     p3p: 'ABCDEF',
-    hsts: {maxAge: 31536000, includeSubDomains: true}
+    hsts: { maxAge: 31536000, includeSubDomains: true }
 }));
 ```
 
-# appsec.csrf()
+# lusca.csrf()
 
 Enables [Cross Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_\(CSRF\)) (CSRF) headers.
 
 If enabled, the CSRF token must be in the payload when modifying data or you will receive a *403 Forbidden*. To send the token you'll need to echo back the `_csrf` value you received from the previous request.
 
 
-# appsec.csp(options)
+# lusca.csp(options)
 
 * `options.policy` Object - Object definition of policy.
 * `options.reportOnly` boolean - Enable report only mode.
@@ -45,7 +45,7 @@ Enables [Content Security Policy](https://www.owasp.org/index.php/Content_Securi
 
 
 
-# appsec.xframe(value)
+# lusca.xframe(value)
 
 * `value` String - The value for the header, e.g. one of DENY, SAMEORIGIN or ALLOW-FROM uri.
 
@@ -53,13 +53,15 @@ Enables X-FRAME-OPTIONS headers to help prevent [Clickjacking](https://www.owasp
 
 
 
-# appsec.p3p(value)
+# lusca.p3p(value)
 
 * `value` String - The compact privacy policy.
 
 Enables [Platform for Privacy Preferences Project](http://support.microsoft.com/kb/290333) (P3P) headers.
 
-# appsec.hsts(options)
+
+
+# lusca.hsts(options)
 
 * `options.maxAge` Number - Required, number of seconds HSTS is in effect. A value of zero cancels HSTS for the domain.
 * `options.includeSubDomains` boolean - If provided and true, apply HSTS to all subdomains of this host

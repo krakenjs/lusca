@@ -1,7 +1,7 @@
 'use strict';
 
 var express = require('express');
-var appsec = require('../../index');
+var lusca = require('../../index');
 var server = express();
 var cspPolicyReport = require('./cspPolicyReport');
 var cspPolicyEnforce = require('./cspPolicyEnforce');
@@ -20,47 +20,47 @@ server.use(express.session({ secret: 'abc' }));
 server.use(express.bodyParser());
 
 // Server routes
-server.get('/xframe/deny', appsec.xframe('DENY'), function (req, res, next) {
+server.get('/xframe/deny', lusca.xframe('DENY'), function (req, res, next) {
 	res.send(200);
 });
 
-server.get('/xframe/sameorigin', appsec.xframe('SAMEORIGIN'), function (req, res, next) {
+server.get('/xframe/sameorigin', lusca.xframe('SAMEORIGIN'), function (req, res, next) {
 	res.send(200);
 });
 
-server.get('/hsts', appsec.hsts({maxAge: 31536000}), function (req, res, next) {
+server.get('/hsts', lusca.hsts({maxAge: 31536000}), function (req, res, next) {
 	res.send(200);
 });
 
-server.get('/hsts0', appsec.hsts({maxAge: 0}), function (req, res, next) {
+server.get('/hsts0', lusca.hsts({maxAge: 0}), function (req, res, next) {
 	res.send(200);
 });
 
-server.get('/hsts/subdomains', appsec.hsts({maxAge: 31536000, includeSubDomains: true}), function (req, res, next) {
+server.get('/hsts/subdomains', lusca.hsts({maxAge: 31536000, includeSubDomains: true}), function (req, res, next) {
 	res.send(200);
 });
 
-server.get('/hsts/missing', appsec.hsts({}), function (req, res, next) {
+server.get('/hsts/missing', lusca.hsts({}), function (req, res, next) {
 	res.send(200);
 });
 
-server.get('/p3p', appsec.p3p('MY_P3P_VALUE'), function (req, res, next) {
+server.get('/p3p', lusca.p3p('MY_P3P_VALUE'), function (req, res, next) {
 	res.send(200);
 });
 
-server.get('/csp/report', appsec.csp(cspPolicyReport), function (req, res, next) {
+server.get('/csp/report', lusca.csp(cspPolicyReport), function (req, res, next) {
 	res.send(200);
 });
 
-server.get('/csp/enforce', appsec.csp(cspPolicyEnforce), function (req, res, next) {
+server.get('/csp/enforce', lusca.csp(cspPolicyEnforce), function (req, res, next) {
 	res.send(200);
 });
 
-server.all('/csrf', appsec.csrf(), function (req, res, next) {
+server.all('/csrf', lusca.csrf(), function (req, res, next) {
 	res.json(200, { token: res.locals._csrf });
 });
 
-server.get('/all', appsec(allConfig), function (req, res, next) {
+server.get('/all', lusca(allConfig), function (req, res, next) {
 	res.send(200);
 });
 

@@ -2,7 +2,7 @@
 'use strict';
 
 
-var appsec = require('../index'),
+var lusca = require('../index'),
 	server = require('./mocks/server'),
 	request = require('supertest'),
 	chai = require('chai'),
@@ -11,7 +11,7 @@ var appsec = require('../index'),
 
 describe('All', function () {
 	it('method', function () {
-		expect(appsec).to.be.a('function');
+		expect(lusca).to.be.a('function');
 	});
 
 	it('headers', function (done) {
@@ -28,7 +28,7 @@ describe('All', function () {
 
 describe('CSRF', function () {
     it('method', function () {
-		expect(appsec.csrf).to.be.a('function');
+		expect(lusca.csrf).to.be.a('function');
     });
 
 	it('GETs have a CSRF token', function (done) {
@@ -67,7 +67,7 @@ describe('CSRF', function () {
 
 describe('CSP', function () {
     it('method', function () {
-		expect(appsec.csp).to.be.a('function');
+		expect(lusca.csp).to.be.a('function');
     });
 
     it('header (report)', function (done) {
@@ -88,7 +88,7 @@ describe('CSP', function () {
 
 describe('XFRAME', function () {
     it('method', function (done) {
-		expect(appsec.xframe).to.be.a('function');
+		expect(lusca.xframe).to.be.a('function');
 		done();
     });
 
@@ -110,7 +110,7 @@ describe('XFRAME', function () {
 
 describe('HSTS', function () {
     it('method', function (done) {
-		expect(appsec.hsts).to.be.a('function');
+		expect(lusca.hsts).to.be.a('function');
 		done();
     });
 
@@ -149,7 +149,7 @@ describe('HSTS', function () {
 
 describe('P3P', function () {
     it('method', function (done) {
-		expect(appsec.p3p).to.be.a('function');
+		expect(lusca.p3p).to.be.a('function');
 		done();
     });
 

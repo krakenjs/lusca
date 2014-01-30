@@ -24,20 +24,20 @@ var express = require('express');
  * Outputs all security headers based on configuration
  * @param {Object} options The configuration object.
  */
-var appsec = module.exports = function (options) {
+var lusca = module.exports = function (options) {
     var headers = [];
 
     if (options) {
-        Object.keys(appsec).forEach(function (key) {
+        Object.keys(lusca).forEach(function (key) {
             var config = options[key];
 
             if (config) {
-                headers.push(appsec[key](config));
+                headers.push(lusca[key](config));
             }
         });
     }
 
-    return function appsec(req, res, next) {
+    return function lusca(req, res, next) {
         var chain = next;
 
         headers.forEach(function (header) {
@@ -62,7 +62,7 @@ var appsec = module.exports = function (options) {
  * https://www.owasp.org/index.php/Content_Security_Policy
  * @param {Object} options The CSP policy.
  */
-appsec.csp = function csp(options) {
+lusca.csp = function csp(options) {
     var policyRules = options && options.policy,
         isReportOnly = options && options.reportOnly,
         reportUri = options && options.reportUri,
@@ -94,7 +94,7 @@ appsec.csp = function csp(options) {
  * CSRF
  * https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
  */
-appsec.csrf = function csrf() {
+lusca.csrf = function csrf() {
     var csrfExpress = express.csrf();
 
     return function csrf(req, res, next) {
@@ -115,7 +115,7 @@ appsec.csrf = function csrf() {
  * https://www.owasp.org/index.php/Clickjacking
  * @param {String} value The XFRAME header value, e.g. DENY, SAMEORIGIN.
  */
-appsec.xframe = function xframe(value) {
+lusca.xframe = function xframe(value) {
     return function xframe(req, res, next) {
         res.header('X-FRAME-OPTIONS', value);
         next();
@@ -129,7 +129,7 @@ appsec.xframe = function xframe(value) {
  *     maxAge is required. If missing, the header will not be emitted.
  *     If includeSubDomains is omitted or false, it will be omitted from the header.
  */
-appsec.hsts = function hsts(options) {
+lusca.hsts = function hsts(options) {
     var maxAge = options && options.maxAge,
         includeSubDomains = options && options.includeSubDomains,
         value;
@@ -153,7 +153,7 @@ appsec.hsts = function hsts(options) {
  * http://support.microsoft.com/kb/290333
  * @param {String} value The P3P header value.
  */
-appsec.p3p = function p3p(value) {
+lusca.p3p = function p3p(value) {
     return function p3p(req, res, next) {
         res.header('P3P', value);
         next();
