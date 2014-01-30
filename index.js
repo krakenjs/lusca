@@ -27,26 +27,14 @@ var express = require('express');
 var appsec = module.exports = function (options) {
     var headers = [];
 
-    options = options || {};
+    if (options) {
+        Object.keys(appsec).forEach(function (key) {
+            var config = options[key];
 
-    if (options.csp) {
-        headers.push(appsec.csp(options.csp));
-    }
-
-    if (options.csrf) {
-        headers.push(appsec.csrf());
-    }
-
-    if (options.xframe) {
-        headers.push(appsec.xframe(options.xframe));
-    }
-
-    if (options.p3p) {
-        headers.push(appsec.p3p(options.p3p));
-    }
-
-    if (options.hsts) {
-        headers.push(appsec.hsts(options.hsts));
+            if (config) {
+                headers.push(appsec[key](config));
+            }
+        });
     }
 
     return function appsec(req, res, next) {
