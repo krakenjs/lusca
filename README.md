@@ -10,8 +10,6 @@ var express = require('express'),
 	app = express(),
 	lusca = require('lusca');
 
-
-```js
 app.use(lusca({
     csrf: true,
     csp: { /* ... */},
