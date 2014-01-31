@@ -1,25 +1,18 @@
 # lusca
 
-Application security for express.
+Web application security middleware.
 
-# methods
+
+## Usage
 
 ```js
 var express = require('express'),
-	lusca = require('lusca'),
-	server = express();
+	app = express(),
+	lusca = require('lusca');
 
-server.use(lusca.csrf());
-server.use(lusca.csp({ /* ... */}));
-server.use(lusca.xframe('SAMEORIGIN'));
-server.use(lusca.p3p('ABCDEF'));
-server.use(lusca.hsts({maxAge: 31536000});
-```
-
-Or you can opt in to all purely by config:
 
 ```js
-server.use(lusca({
+app.use(lusca({
     csrf: true,
     csp: { /* ... */},
     xframe: 'SAMEORIGIN',
@@ -28,14 +21,33 @@ server.use(lusca({
 }));
 ```
 
-# lusca.csrf()
+
+Alternately, you can opt into methods one by one:
+
+```js
+app.use(lusca.csrf());
+app.use(lusca.csp({ /* ... */}));
+app.use(lusca.xframe('SAMEORIGIN'));
+app.use(lusca.p3p('ABCDEF'));
+app.use(lusca.hsts({maxAge: 31536000});
+```
+
+
+
+## API
+
+
+### lusca.csrf()
+
+* `key` String - The name of the CSRF token added to the model. Defaults to `_csrf`.
+* `fn` Function - Can be used to generate a custom token.
 
 Enables [Cross Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_\(CSRF\)) (CSRF) headers.
 
 If enabled, the CSRF token must be in the payload when modifying data or you will receive a *403 Forbidden*. To send the token you'll need to echo back the `_csrf` value you received from the previous request.
 
 
-# lusca.csp(options)
+### lusca.csp(options)
 
 * `options.policy` Object - Object definition of policy.
 * `options.reportOnly` boolean - Enable report only mode.
@@ -45,25 +57,25 @@ Enables [Content Security Policy](https://www.owasp.org/index.php/Content_Securi
 
 
 
-# lusca.xframe(value)
+### lusca.xframe(value)
 
-* `value` String - The value for the header, e.g. one of DENY, SAMEORIGIN or ALLOW-FROM uri.
+* `value` String - Required. The value for the header, e.g. DENY, SAMEORIGIN or ALLOW-FROM uri.
 
 Enables X-FRAME-OPTIONS headers to help prevent [Clickjacking](https://www.owasp.org/index.php/Clickjacking).
 
 
 
-# lusca.p3p(value)
+### lusca.p3p(value)
 
-* `value` String - The compact privacy policy.
+* `value` String - Required. The compact privacy policy.
 
 Enables [Platform for Privacy Preferences Project](http://support.microsoft.com/kb/290333) (P3P) headers.
 
 
 
-# lusca.hsts(options)
+### lusca.hsts(options)
 
-* `options.maxAge` Number - Required, number of seconds HSTS is in effect. A value of zero cancels HSTS for the domain.
-* `options.includeSubDomains` boolean - If provided and true, apply HSTS to all subdomains of this host
+* `options.maxAge` Number - Required. Number of seconds HSTS is in effect.
+* `options.includeSubDomains` Boolean - Applies HSTS to all subdomains of the host
 
 Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_Strict_Transport_Security) for the host domain.
