@@ -17,8 +17,6 @@
 \*───────────────────────────────────────────────────────────────────────────*/
 'use strict';
 
-var express = require('express');
-
 
 /**
  * Outputs all security headers based on configuration
@@ -57,107 +55,8 @@ var lusca = module.exports = function (options) {
 };
 
 
-/**
- * Content Security Policy (CSP)
- * https://www.owasp.org/index.php/Content_Security_Policy
- * @param {Object} options The CSP policy.
- */
-lusca.csp = function csp(options) {
-    var policyRules = options && options.policy,
-        isReportOnly = options && options.reportOnly,
-        reportUri = options && options.reportUri,
-        value = "",
-        name, key;
-
-    name = 'Content-Security-Policy';
-    if (isReportOnly) {
-        name += '-Report-Only';
-    }
-
-
-    for (key in policyRules) {
-        value += key + " " + policyRules[key] + "; ";
-    }
-
-    if (reportUri) {
-        value += "reportUri " + reportUri;
-    }
-
-    return function csp(req, res, next) {
-        res.header(name, value);
-        next();
-    };
-};
-
-
-/**
- * CSRF
- * https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
- */
-lusca.csrf = function csrf() {
-    var csrfExpress = express.csrf();
-
-    return function csrf(req, res, next) {
-        if (req.session) {
-            csrfExpress(req, res, function (err) {
-                res.locals._csrf = (typeof req.csrfToken === 'function') ? req.csrfToken() : req.session._csrf;
-                next(err);
-            });
-            return;
-        }
-        next();
-    };
-};
-
-
-/**
- * Xframes
- * https://www.owasp.org/index.php/Clickjacking
- * @param {String} value The XFRAME header value, e.g. DENY, SAMEORIGIN.
- */
-lusca.xframe = function xframe(value) {
-    return function xframe(req, res, next) {
-        res.header('X-FRAME-OPTIONS', value);
-        next();
-    };
-};
-
-/**
- * HSTS - Http Strict Transport Security
- * https://www.owasp.org/index.php/HTTP_Strict_Transport_Security
- * @param {Object} options The HSTS options {maxAge: nnnn; includeSubDomains: boolean}
- *     maxAge is required. If missing, the header will not be emitted.
- *     If includeSubDomains is omitted or false, it will be omitted from the header.
- */
-lusca.hsts = function hsts(options) {
-    var maxAge = options && options.maxAge,
-        includeSubDomains = options && options.includeSubDomains,
-        value;
-    
-    if (maxAge || maxAge === 0) {
-        value = 'max-age=' + maxAge;
-        value += includeSubDomains ? '; includeSubDomains' : '';
-        return function hsts(req, res, next) {
-            res.header('Strict-Transport-Security', value);
-            next();
-        };
-    }
-    return function hsts(req, res, next) {
-        next();
-    };
-};
-
-
-/**
- * P3P - Platform for Privacy Preferences Project
- * http://support.microsoft.com/kb/290333
- * @param {String} value The P3P header value.
- */
-lusca.p3p = function p3p(value) {
-    return function p3p(req, res, next) {
-        res.header('P3P', value);
-        next();
-    };
-};
-
-
+lusca.csrf = require('./lib/csrf');
+lusca.csp = require('./lib/csp');
+lusca.hsts = require('./lib/hsts');
+lusca.p3p = require('./lib/p3p');
+lusca.xframe = require('./lib/xframes');
