@@ -19,15 +19,14 @@ app.use(lusca({
 }));
 ```
 
-
-Alternately, you can opt into methods one by one:
+Setting any value to `false` will disable it. Alternately, you can opt into methods one by one:
 
 ```js
 app.use(lusca.csrf());
 app.use(lusca.csp({ /* ... */}));
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.p3p('ABCDEF'));
-app.use(lusca.hsts({maxAge: 31536000});
+app.use(lusca.hsts({ maxAge: 31536000 });
 ```
 
 
@@ -35,7 +34,7 @@ app.use(lusca.hsts({maxAge: 31536000});
 ## API
 
 
-### lusca.csrf()
+### lusca.csrf(options)
 
 * `key` String - The name of the CSRF token added to the model. Defaults to `_csrf`.
 * `fn` Function - Can be used to generate a custom token.
