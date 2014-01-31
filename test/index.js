@@ -3,7 +3,7 @@
 
 
 var lusca = require('../index'),
-	server = require('./mocks/server'),
+	app = require('./mocks/server'),
 	request = require('supertest'),
 	chai = require('chai'),
 	expect = chai.expect;
@@ -15,7 +15,7 @@ describe('All', function () {
 	});
 
 	it('headers', function (done) {
-		request(server)
+		request(app)
 			.get('/all')
 			.expect('X-FRAME-OPTIONS', 'SAMEORIGIN')
 			.expect('P3P', 'MY_P3P_VALUE')
@@ -32,7 +32,7 @@ describe('CSRF', function () {
     });
 
 	it('GETs have a CSRF token', function (done) {
-		request(server)
+		request(app)
 			.get('/csrf')
 			.expect(200)
 			.end(function (err, res) {
@@ -44,10 +44,10 @@ describe('CSRF', function () {
 	// FIXME - SuperTest does not save cookies so the session is regenerated
 	// each time resulting in a new CSRF token
 	// it('POST (200 OK with token)', function (done) {
-	// 	request(server)
+	// 	request(app)
 	// 		.get('/csrf')
 	// 		.end(function (err, res) {
-	// 			request(server)
+	// 			request(app)
 	// 				.post('/csrf')
 	// 				.field('_csrf', res.body.token)
 	// 				.expect(200, done);
@@ -55,7 +55,7 @@ describe('CSRF', function () {
 	// });
 
 	it('POST (403 Forbidden on no token)', function (done) {
-		request(server)
+		request(app)
 			.post('/csrf')
 			.expect(403)
 			.end(function (err, res) {
@@ -71,14 +71,14 @@ describe('CSP', function () {
     });
 
     it('header (report)', function (done) {
-		request(server)
+		request(app)
 			.get('/csp/report')
 			.expect('Content-Security-Policy-Report-Only', 'default-src *; reportUri http://www.example.com')
 			.expect(200, done);
 	});
 
 	it('header (enforce)', function (done) {
-		request(server)
+		request(app)
 			.get('/csp/enforce')
 			.expect('Content-Security-Policy', 'default-src *; ')
 			.expect(200, done);
@@ -93,14 +93,14 @@ describe('XFRAME', function () {
     });
 
 	it('header (deny)', function (done) {
-		request(server)
+		request(app)
 			.get('/xframe/deny')
 			.expect('X-FRAME-OPTIONS', 'DENY')
 			.expect(200, done);
 	});
 
 	it('header (sameorigin)', function (done) {
-		request(server)
+		request(app)
 			.get('/xframe/sameorigin')
 			.expect('X-FRAME-OPTIONS', 'SAMEORIGIN')
 			.expect(200, done);
@@ -115,28 +115,28 @@ describe('HSTS', function () {
     });
 
 	it('header (maxAge)', function (done) {
-		request(server)
+		request(app)
 			.get('/hsts')
 			.expect('Strict-Transport-Security', 'max-age=31536000')
 			.expect(200, done);
 	});
 
 	it('header (maxAge 0)', function (done) {
-		request(server)
+		request(app)
 			.get('/hsts0')
 			.expect('Strict-Transport-Security', 'max-age=0')
 			.expect(200, done);
 	});
 
 	it('header (maxAge; includeSubDomains)', function (done) {
-		request(server)
+		request(app)
 			.get('/hsts/subdomains')
 			.expect('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
 			.expect(200, done);
 	});
 
 	it('header (missing maxAge)', function (done) {
-		request(server)
+		request(app)
 			.get('/hsts/missing')
 			.expect(200)
 	                .end(function (err, res) {
@@ -154,7 +154,7 @@ describe('P3P', function () {
     });
 
 	it('header', function (done) {
-		request(server)
+		request(app)
 			.get('/p3p')
 			.expect('P3P', 'MY_P3P_VALUE')
 			.expect(200, done);

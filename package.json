@@ -27,9 +27,6 @@
         "node": ">=0.8.x"
     },
     "engineStrict": true,
-    "peerDependencies": {
-        "express": "*"
-    },
     "devDependencies": {
         "chai": "~1.7.2",
         "mocha": "~1.12.0",
