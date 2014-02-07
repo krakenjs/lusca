@@ -36,8 +36,8 @@ app.use(lusca.hsts({ maxAge: 31536000 });
 
 ### lusca.csrf(options)
 
-* `key` String - The name of the CSRF token added to the model. Defaults to `_csrf`.
-* `fn` Function - Can be used to generate a custom token.
+* `key` String - Optional. The name of the CSRF token added to the model. Defaults to `_csrf`.
+* `impl` Function - Optional. Custom implementation to generate a token.
 
 Enables [Cross Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_\(CSRF\)) (CSRF) headers.
 
@@ -47,7 +47,7 @@ If enabled, the CSRF token must be in the payload when modifying data or you wil
 ### lusca.csp(options)
 
 * `options.policy` Object - Object definition of policy.
-* `options.reportOnly` boolean - Enable report only mode.
+* `options.reportOnly` Boolean - Enable report only mode.
 * `options.reportUri` String - URI where to send the report data
 
 Enables [Content Security Policy](https://www.owasp.org/index.php/Content_Security_Policy) (CSP) headers.
@@ -73,6 +73,6 @@ Enables [Platform for Privacy Preferences Project](http://support.microsoft.com/
 ### lusca.hsts(options)
 
 * `options.maxAge` Number - Required. Number of seconds HSTS is in effect.
-* `options.includeSubDomains` Boolean - Applies HSTS to all subdomains of the host
+* `options.includeSubDomains` Boolean - Optional. Applies HSTS to all subdomains of the host
 
 Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_Strict_Transport_Security) for the host domain.
