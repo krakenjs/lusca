@@ -42,17 +42,16 @@ describe('CSRF', function () {
 	});
 
 	// FIXME - SuperTest does not save cookies so the session is regenerated
-	// each time resulting in a new CSRF token
-	// it('POST (200 OK with token)', function (done) {
-	// 	request(app)
-	// 		.get('/csrf')
-	// 		.end(function (err, res) {
-	// 			request(app)
-	// 				.post('/csrf')
-	// 				.field('_csrf', res.body.token)
-	// 				.expect(200, done);
-	// 		});
-	// });
+	it.skip('POST (200 OK with token)', function (done) {
+		request(app)
+			.get('/csrf')
+			.end(function (err, res) {
+				request(app)
+					.post('/csrf')
+					.field('_csrf', res.body.token)
+					.expect(200, done);
+			});
+	});
 
 	it('POST (403 Forbidden on no token)', function (done) {
 		request(app)
@@ -62,6 +61,14 @@ describe('CSRF', function () {
 				done(err);
 			});
 	});
+
+    it.skip('Should allow custom keys', function (done) {
+
+    });
+
+    it.skip('Should allow custom functions', function (done) {
+
+    });
 });
 
 
