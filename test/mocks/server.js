@@ -10,7 +10,8 @@ var allConfig = {
 	xframe: 'SAMEORIGIN',
 	p3p: 'MY_P3P_VALUE',
 	hsts: {maxAge: 31536000},
-	csp: cspPolicyReport
+	csp: cspPolicyReport,
+	xssProtection: true
 };
 
 
@@ -64,6 +65,8 @@ server.get('/all', appsec(allConfig), function (req, res, next) {
 	res.send(200);
 });
 
-
+server.get('/xssProtection', appsec.xssProtection(), function (req, res, next) {
+	res.send(200);
+});
 
 module.exports = server;

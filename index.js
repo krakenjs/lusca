@@ -51,6 +51,10 @@ var appsec = module.exports = function (options) {
         headers.push(appsec.hsts(options.hsts));
     }
 
+    if (options.xssProtection) {
+        headers.push(appsec.xssProtection());
+    }
+
     return function appsec(req, res, next) {
         var chain = next;
 
@@ -175,3 +179,13 @@ appsec.p3p = function p3p(value) {
 };
 
 
+/**
+ * X-XSS-Protection
+ * http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-security-part-iv-the-xss-filter.aspx
+ */
+appsec.xssProtection = function xssProtection() {
+    return function xssProtection(req, res, next) {
+        res.header('X-XSS-Protection', '1; mode=block');
+        next();
+    };
+};
