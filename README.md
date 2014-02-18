@@ -72,6 +72,8 @@ Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_St
 
 
 
-# appsec.xssProtection()
+# appsec.xssProtection(value)
+
+* `value` String - The value for the header.  Defaults to `1; mode=block`
 
 Enables [X-XSS-Protection](http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-security-part-iv-the-xss-filter.aspx) headers to help prevent cross site scripting (XSS) attacks in older IE browsers (IE8)
