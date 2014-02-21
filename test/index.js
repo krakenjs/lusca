@@ -21,6 +21,7 @@ describe('All', function () {
 			.expect('P3P', 'MY_P3P_VALUE')
 			.expect('Strict-Transport-Security', 'max-age=31536000')
 			.expect('Content-Security-Policy-Report-Only', 'default-src *; reportUri http://www.example.com')
+			.expect('X-XSS-Protection', '1; mode=block')
 			.expect(200, done);
 	});
 });
@@ -157,6 +158,21 @@ describe('P3P', function () {
 		request(server)
 			.get('/p3p')
 			.expect('P3P', 'MY_P3P_VALUE')
+			.expect(200, done);
+	});
+});
+
+
+describe('xssProtection', function () {
+    it('method', function () {
+		expect(appsec.xssProtection).to.be.a('function');
+    });
+
+	it('header', function (done) {
+		request(server)
+			.get('/xssProtection')
+			.expect(200)
+			.expect('X-XSS-Protection', '1; mode=block')
 			.expect(200, done);
 	});
 });

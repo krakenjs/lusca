@@ -17,6 +17,7 @@ server.use(appsec.csp({ /* ... */}));
 server.use(appsec.xframe('SAMEORIGIN'));
 server.use(appsec.p3p('ABCDEF'));
 server.use(appsec.hsts({maxAge: 31536000});
+server.use(appsec.xssProtection());
 ```
 
 Or you can opt in to all purely by config:
@@ -27,7 +28,8 @@ server.use(appsec({
     csp: { /* ... */},
     xframe: 'SAMEORIGIN',
     p3p: 'ABCDEF',
-    hsts: {maxAge: 31536000, includeSubDomains: true}
+    hsts: {maxAge: 31536000, includeSubDomains: true},
+    xssProtection: true
 }));
 ```
 
@@ -62,9 +64,19 @@ Enables X-FRAME-OPTIONS headers to help prevent [Clickjacking](https://www.owasp
 
 Enables [Platform for Privacy Preferences Project](http://support.microsoft.com/kb/290333) (P3P) headers.
 
+
+
 # appsec.hsts(options)
 
 * `options.maxAge` Number - Required, number of seconds HSTS is in effect. A value of zero cancels HSTS for the domain.
 * `options.includeSubDomains` boolean - If provided and true, apply HSTS to all subdomains of this host
 
 Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_Strict_Transport_Security) for the host domain.
+
+
+
+# appsec.xssProtection(value)
+
+* `value` String - The value for the header.  Defaults to `1; mode=block`
+
+Enables [X-XSS-Protection](http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-security-part-iv-the-xss-filter.aspx) headers to help prevent cross site scripting (XSS) attacks in older IE browsers (IE8)
