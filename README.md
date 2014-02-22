@@ -18,7 +18,8 @@ app.use(lusca({
     csp: { /* ... */},
     xframe: 'SAMEORIGIN',
     p3p: 'ABCDEF',
-    hsts: { maxAge: 31536000, includeSubDomains: true }
+    hsts: {maxAge: 31536000, includeSubDomains: true},
+    xssProtection: true
 }));
 ```
 
@@ -30,6 +31,7 @@ app.use(lusca.csp({ /* ... */}));
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.p3p('ABCDEF'));
 app.use(lusca.hsts({ maxAge: 31536000 });
+app.use(lusca.xssProtection(true);
 ```
 
 
@@ -79,3 +81,12 @@ Enables [Platform for Privacy Preferences Project](http://support.microsoft.com/
 * `options.includeSubDomains` Boolean - Optional. Applies HSTS to all subdomains of the host
 
 Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_Strict_Transport_Security) for the host domain.
+
+
+
+### lusca.xssProtection(options)
+
+* `options.enabled` Boolean - Optional. If the header is enabled or not (see header docs). Defaults to `1`.
+* `options.mode` String - Optional. Mode to set on the header (see header docs). Defaults to `block`.
+
+Enables [X-XSS-Protection](http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-security-part-iv-the-xss-filter.aspx) headers to help prevent cross site scripting (XSS) attacks in older IE browsers (IE8)
