@@ -27,15 +27,10 @@
         "node": ">=0.8.x"
     },
     "engineStrict": true,
-    "peerDependencies": {
-        "express": "*"
-    },
     "devDependencies": {
-        "chai": "~1.7.2",
-        "mocha": "~1.12.0",
         "jshint": "*",
         "supertest": "~0.5.1",
-        "express": "~3.4",
+        "express": "~3.4.8",
         "grunt": "~0.4.1",
         "grunt-contrib-jshint": "~0.7.0",
         "grunt-mocha-test": "~0.7.0"
