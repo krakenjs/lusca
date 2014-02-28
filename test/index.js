@@ -28,7 +28,7 @@ describe('All', function () {
 			.expect('X-FRAME-OPTIONS', config.xframe)
 			.expect('P3P', config.p3p)
 			.expect('Strict-Transport-Security', 'max-age=' + config.hsts.maxAge)
-			.expect('Content-Security-Policy-Report-Only', 'default-src *; reportUri ' + config.csp.reportUri)
+			.expect('Content-Security-Policy-Report-Only', 'default-src *; report-uri ' + config.csp.reportUri)
             .expect('X-XSS-Protection', '1; mode=block')
             .expect(200, done);
 	});
