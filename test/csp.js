@@ -25,7 +25,7 @@ describe('CSP', function () {
 
         request(app)
             .get('/')
-            .expect('Content-Security-Policy-Report-Only', 'default-src *; reportUri ' + config.reportUri)
+            .expect('Content-Security-Policy-Report-Only', 'default-src *; report-uri ' + config.reportUri)
             .expect(200, done);
     });
 
