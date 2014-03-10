@@ -43,6 +43,19 @@ describe('xssProtection', function () {
             .expect(200, done);
     });
 
+    it('header (enabled is boolean; custom mode)', function (done) {
+        var config = { xssProtection: { enabled: true } },
+            app = mock(config);
+
+        app.get('/', function (req, res) {
+            res.send(200);
+        });
+
+        request(app)
+            .get('/')
+            .expect('X-XSS-Protection', '1; mode=block')
+            .expect(200, done);
+    });
 
     it('header (!enabled)', function (done) {
         var config = { xssProtection: { enabled: 0 } },
