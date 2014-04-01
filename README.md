@@ -1,6 +1,6 @@
 # lusca
 
-[![Build Status](https://travis-ci.org/paypal/lusca.png?branch=master)](https://travis-ci.org/paypal/lusca)
+[![Build Status](https://travis-ci.org/krakenjs/lusca.png?branch=master)](https://travis-ci.org/krakenjs/lusca)
 [![NPM version](https://badge.fury.io/js/lusca.png)](http://badge.fury.io/js/lusca)
 
 Web application security middleware.
