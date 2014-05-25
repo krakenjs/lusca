@@ -32,11 +32,15 @@ var lusca = module.exports = function (options) {
 
             if (config) {
                 if (koa) {
-                    if (key === 'csrf' && config === true) {
+                    if ((key === 'csrf' || key === 'xssProtection') &&
+                        config === true) {
                         // { csrf: true }
+                        // { xssProtection: true }
                         config = {};
-                    } else if (key === 'xframe' && typeof config === 'string') {
+                    } else if ((key === 'xframe' || key === 'p3p') &&
+                        typeof config === 'string') {
                         // { xframe: 'DENY' }
+                        // { p3p: 'MY_P3P_VALUE' }
                         config = {
                             value: config
                         };
