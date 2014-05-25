@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/krakenjs/lusca.svg?branch=master)](https://travis-ci.org/krakenjs/lusca)
 [![NPM version](https://badge.fury.io/js/lusca.svg)](http://badge.fury.io/js/lusca)
 
-Web application security middleware.
+Web application security middleware. Support express and koa.
 
 
 ## Usage

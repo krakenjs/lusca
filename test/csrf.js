@@ -32,7 +32,7 @@ describe('CSRF', function () {
     });
 
 
-	it('POST (200 OK with token)', function (done) {
+    it('POST (200 OK with token)', function (done) {
         var app = mock({ csrf: true });
 
         app.all('/', function (req, res) {
@@ -40,17 +40,17 @@ describe('CSRF', function () {
         });
 
         request(app)
-			.get('/')
-			.end(function (err, res) {
-				request(app)
-					.post('/')
-                    .set('cookie', res.headers['set-cookie'])
-					.send({
+            .get('/')
+            .end(function (err, res) {
+                request(app)
+                    .post('/')
+                    .set('cookie', res.headers['set-cookie'].join(';'))
+                    .send({
                         _csrf: res.body.token
                     })
-					.expect(200, done);
-			});
-	});
+                    .expect(200, done);
+            });
+    });
 
 
     it('POST (403 Forbidden on no token)', function (done) {
@@ -81,7 +81,7 @@ describe('CSRF', function () {
             .end(function (err, res) {
                 request(app)
                     .post('/')
-                    .set('cookie', res.headers['set-cookie'])
+                    .set('cookie', res.headers['set-cookie'].join(';'))
                     .send({
                         foobar: res.body.token
                     })

@@ -24,15 +24,35 @@
  */
 var lusca = module.exports = function (options) {
     var headers = [];
-
+    var koa;
     if (options) {
+        koa = !!options.koa;
         Object.keys(lusca).forEach(function (key) {
             var config = options[key];
 
             if (config) {
+                if (koa) {
+                    if (key === 'csrf' && config === true) {
+                        // { csrf: true }
+                        config = {};
+                    } else if (key === 'xframe' && typeof config === 'string') {
+                        // { xframe: 'DENY' }
+                        config = {
+                            value: config
+                        };
+                    }
+                    config.koa = koa;
+                }
                 headers.push(lusca[key](config));
             }
         });
+    }
+
+    if (koa) {
+        var compose = require('koa-compose');
+        var mw = compose(headers);
+        mw._name = 'lusca';
+        return mw;
     }
 
     return function lusca(req, res, next) {
