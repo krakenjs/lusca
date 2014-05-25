@@ -8,17 +8,19 @@ Web application security middleware. Support express and koa.
 
 ## Usage
 
+### For express
+
 ```js
 var express = require('express'),
-	app = express(),
-	lusca = require('lusca');
+    app = express(),
+    lusca = require('lusca');
 
 app.use(lusca({
     csrf: true,
     csp: { /* ... */},
     xframe: 'SAMEORIGIN',
     p3p: 'ABCDEF',
-    hsts: {maxAge: 31536000, includeSubDomains: true},
+    hsts: { maxAge: 31536000, includeSubDomains: true },
     xssProtection: true
 }));
 ```
@@ -34,6 +36,35 @@ app.use(lusca.hsts({ maxAge: 31536000 });
 app.use(lusca.xssProtection(true);
 ```
 
+### For koa
+
+```js
+var koa = require('koa'),
+    app = koa(),
+    lusca = require('lusca');
+
+app.use(lusca({
+    koa: true, // make sure use koa style middleware
+
+    csrf: true,
+    csp: { /* ... */},
+    xframe: 'SAMEORIGIN',
+    p3p: 'ABCDEF',
+    hsts: { maxAge: 31536000, includeSubDomains: true },
+    xssProtection: true
+}));
+```
+
+Setting any value to `false` will disable it. Alternately, you can opt into methods one by one:
+
+```js
+app.use(lusca.csrf({ koa: true }));
+app.use(lusca.csp({ koa: true, /* ... */}));
+app.use(lusca.xframe({ koa: true, value: 'SAMEORIGIN' }));
+app.use(lusca.p3p({ koa: true, value: 'ABCDEF' }));
+app.use(lusca.hsts({ koa: true, maxAge: 31536000 });
+app.use(lusca.xssProtection({ koa: true });
+```
 
 
 ## API
