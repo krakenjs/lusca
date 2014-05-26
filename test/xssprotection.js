@@ -8,7 +8,6 @@ var lusca = require('../index'),
     mock = require('./mocks/app');
 
 
-
 describe('xssProtection', function () {
 
     it('method', function () {

@@ -43,5 +43,4 @@ describe('CSP', function () {
             .expect('Content-Security-Policy', 'default-src *; ')
             .expect(200, done);
     });
-
 });

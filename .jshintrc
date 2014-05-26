@@ -117,7 +117,9 @@
     // Whether only function scope should be used for scope tests.
     "funcscope": false,
     // Whether es.next specific syntax should be allowed.
-    "esnext": false,
+    "esnext": true,
+    // This option suppresses warnings about generator functions with no yield statement in them.
+    "noyield": true,
     // Tolerate all forms of subscript notation besides dot notation e.g. `dict['key']` instead of `dict.key`.
     "sub": true,
 
