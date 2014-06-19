@@ -32,7 +32,7 @@ describe('CSRF', function () {
     });
 
 
-	it('POST (200 OK with token)', function (done) {
+    it('POST (200 OK with token)', function (done) {
         var app = mock({ csrf: true });
 
         app.all('/', function (req, res) {
@@ -40,17 +40,17 @@ describe('CSRF', function () {
         });
 
         request(app)
-			.get('/')
-			.end(function (err, res) {
-				request(app)
-					.post('/')
+            .get('/')
+            .end(function (err, res) {
+                request(app)
+                    .post('/')
                     .set('cookie', res.headers['set-cookie'])
-					.send({
+                    .send({
                         _csrf: res.body.token
                     })
-					.expect(200, done);
-			});
-	});
+                    .expect(200, done);
+            });
+    });
 
 
     it('POST (403 Forbidden on no token)', function (done) {
@@ -84,6 +84,48 @@ describe('CSRF', function () {
                     .set('cookie', res.headers['set-cookie'])
                     .send({
                         foobar: res.body.token
+                    })
+                    .expect(200, done);
+            });
+    });
+
+    it('Token can be sent through header instead of post body', function (done) {
+        var app = mock({ csrf: true });
+
+        app.all('/', function (req, res) {
+            res.send(200, {token: res.locals._csrf });
+        });
+
+        request(app)
+            .get('/')
+            .end(function (err, res) {
+                request(app)
+                    .post('/')
+                    .set('cookie', res.headers['set-cookie'])
+                    .set('x-csrf-token', res.body.token)
+                    .send({
+                        name: 'Test'
+                    })
+                    .expect(200, done);
+            });
+    });
+
+    it('Should allow custom headers', function (done) {
+        var app = mock({ csrf: {header: 'x-xsrf-token'} });
+
+        app.all('/', function (req, res) {
+            res.send(200, {token: res.locals._csrf });
+        });
+
+        request(app)
+            .get('/')
+            .end(function (err, res) {
+                request(app)
+                    .post('/')
+                    .set('cookie', res.headers['set-cookie'])
+                    .set('x-xsrf-token', res.body.token)
+                    .send({
+                        name: 'Test'
                     })
                     .expect(200, done);
             });
