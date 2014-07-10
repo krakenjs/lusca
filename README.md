@@ -30,8 +30,8 @@ app.use(lusca.csrf());
 app.use(lusca.csp({ /* ... */}));
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.p3p('ABCDEF'));
-app.use(lusca.hsts({ maxAge: 31536000 });
-app.use(lusca.xssProtection(true);
+app.use(lusca.hsts({ maxAge: 31536000 }));
+app.use(lusca.xssProtection(true));
 ```
 
 
