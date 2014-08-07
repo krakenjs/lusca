@@ -19,15 +19,12 @@
     "scripts": {
         "test": "node ./node_modules/.bin/mocha ./test"
     },
-    "peerDependencies": {
-        "express": "*"
-    },
     "devDependencies": {
         "chai": "~1.7.2",
         "mocha": "~1.12.0",
         "jshint": "*",
         "supertest": "~0.5.1",
-        "express": "~3.4"
+        "express": "^3.16.1"
     },
     "engines": {
         "node": ">=0.8.x"
