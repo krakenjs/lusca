@@ -42,6 +42,7 @@ app.use(lusca.xssProtection(true));
 ### lusca.csrf(options)
 
 * `key` String - Optional. The name of the CSRF token added to the model. Defaults to `_csrf`.
+* `secret` String - Optional. The key to place on the session object which maps to the server side token. Defaults to `_csrfSecret`.
 * `impl` Function - Optional. Custom implementation to generate a token.
 
 Enables [Cross Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_\(CSRF\)) (CSRF) headers.
