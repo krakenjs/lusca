@@ -131,6 +131,25 @@ describe('CSRF', function () {
             });
     });
 
+    it('Should allow custom secret key', function (done) {
+        var app = mock({ csrf: {'secret': 'shhCsrf'} });
+
+        app.all('/', function (req, res) {
+            res.send(200, { token: res.locals._csrf });
+        });
+
+        request(app)
+            .get('/')
+            .end(function (err, res) {
+                request(app)
+                    .post('/')
+                    .set('cookie', res.headers['set-cookie'])
+                    .send({
+                        _csrf: res.body.token
+                    })
+                    .expect(200, done);
+            });
+    });
 
     it('Should allow custom functions', function (done) {
         var myToken = require('./mocks/token'),
