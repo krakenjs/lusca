@@ -2,18 +2,22 @@
 
 
 var express = require('express'),
+    cookieParser = require('cookie-parser'),
+    session = require('cookie-session'),
+    bodyParser = require('body-parser'),
+    errorHandler = require('errorhandler'),
     lusca = require('../..');
 
 
 module.exports = function (config) {
     var app = express();
 
-    app.use(express.cookieParser());
-    app.use(express.session({ secret: 'abc' }));
-    app.use(express.json());
-    app.use(express.urlencoded());
+    app.use(cookieParser());
+    app.use(session({ secret: 'abc' }));
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({extended: false}));
     app.use(lusca(config));
-    app.use(express.errorHandler());
+    app.use(errorHandler());
 
     return app;
 };
