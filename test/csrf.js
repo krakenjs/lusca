@@ -33,7 +33,7 @@ describe('CSRF', function () {
 
 
     it('POST (200 OK with token)', function (done) {
-        var app = mock({ csrf: true });
+        var app = mock({ csrf: {'secret': 'shhCsrf'} });
 
         app.all('/', function (req, res) {
             res.send(200, { token: res.locals._csrf });
@@ -42,6 +42,7 @@ describe('CSRF', function () {
         request(app)
             .get('/')
             .end(function (err, res) {
+                console.log('setcookie', res.headers['set-cookie']);
                 request(app)
                     .post('/')
                     .set('cookie', res.headers['set-cookie'])
