@@ -36,6 +36,7 @@ describe('CSRF', function () {
         var app = mock({ csrf: true });
 
         app.all('/', function (req, res) {
+            console.log('req.cookies', req.cookies);
             res.send(200, { token: res.locals._csrf });
         });
 

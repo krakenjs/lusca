@@ -9,7 +9,7 @@ module.exports = function (config) {
     var app = express();
 
     app.use(express.cookieParser());
-    app.use(express.cookieSession({ secret: 'abc' }));
+    app.use(express.session({ secret: 'abc' }));
     app.use(express.json());
     app.use(express.urlencoded());
     app.use(lusca(config));
