@@ -36,7 +36,8 @@ describe('CSRF', function () {
         var app = mock({ csrf: {'secret': 'shhCsrf'} });
 
         app.all('/', function (req, res) {
-            res.send(200, { token: res.locals._csrf });
+            console.log('req.cookies', req.cookies);
+            res.status(200).send({ token: res.locals._csrf });
         });
 
         request(app)
@@ -45,7 +46,7 @@ describe('CSRF', function () {
                 console.log('setcookie', res.headers['set-cookie']);
                 request(app)
                     .post('/')
-                    .set('cookie', res.headers['set-cookie'])
+                    .set('Cookie', res.headers['set-cookie'].pop().split(';')[0])
                     .send({
                         _csrf: res.body.token
                     })
