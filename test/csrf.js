@@ -43,11 +43,16 @@ describe('CSRF', function () {
         request(app)
             .get('/')
             .end(function (err, res) {
-
+                var cookies = [];
+                res.headers['set-cookie'].forEach(function (cookie) {
+                    console.log('cookie', cookie);
+                    cookies.push(cookie.split(";")[0]);
+                });
                 console.log("res.headers['set-cookie']", res.headers['set-cookie']);
                 request(app)
                     .post('/')
-                    .set('Cookie', res.headers['set-cookie'].pop().split(';')[0])
+                    .set('Cookie', cookies)
+                   // .set('Cookie', cookies[1])
                     .send({
                         _csrf: res.body.token
                     })
