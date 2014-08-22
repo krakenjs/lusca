@@ -43,7 +43,8 @@ describe('CSRF', function () {
         request(app)
             .get('/')
             .end(function (err, res) {
-                console.log('setcookie', res.headers['set-cookie']);
+
+                console.log("res.headers['set-cookie']", res.headers['set-cookie']);
                 request(app)
                     .post('/')
                     .set('Cookie', res.headers['set-cookie'].pop().split(';')[0])

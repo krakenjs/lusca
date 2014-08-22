@@ -3,7 +3,7 @@
 
 var express = require('express'),
     cookieParser = require('cookie-parser'),
-    session = require('express-session'),
+    session = require('cookie-session'),
     bodyParser = require('body-parser'),
     errorHandler = require('errorhandler'),
     lusca = require('../..');
