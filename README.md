@@ -57,7 +57,19 @@ If enabled, the CSRF token must be in the payload when modifying data or you wil
 
 Enables [Content Security Policy](https://www.owasp.org/index.php/Content_Security_Policy) (CSP) headers.
 
+#### Example Options
 
+```js
+// Everything but images can only come from own domain (excluding subdomains)
+{
+  policy: {
+    'default-src': '\'self\'',
+    'img-src': '*'
+  }
+}
+```
+
+See the [MDN CSP usage](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Using_Content_Security_Policy) page for more information on available policy options.
 
 ### lusca.xframe(value)
 
