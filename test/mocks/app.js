@@ -16,9 +16,11 @@ module.exports = function (config, sessionType) {
 	app.use(cookieParser());
 	if (sessionType === undefined || sessionType === 'session') {
 		app.use(session({
-			secret: 'abc'
+			secret: 'abc',
+			resave: true,
+			saveUninitialized: true
 		}));
-	} else {
+	} else if (sessionType === "cookie") {
 		app.use(cookieSession({
 			secret: 'abc'
 		}));
