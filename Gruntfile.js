@@ -33,7 +33,8 @@ module.exports = function (grunt) {
                 timeout: 15000,
                 ignoreLeaks: false,
                 ui: 'bdd',
-                reporter: 'spec'
+                reporter: 'spec',
+                grep: grunt.option('grep') || 0
             }
         }
     });

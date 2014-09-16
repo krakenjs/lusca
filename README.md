@@ -11,7 +11,15 @@ Web application security middleware.
 ```js
 var express = require('express'),
 	app = express(),
+	session = require('express-session'),
 	lusca = require('lusca');
+
+//this or other session management will be required
+app.use(session({
+	secret: 'abc',
+	resave: true,
+	saveUninitialized: true
+}));
 
 app.use(lusca({
     csrf: true,
@@ -34,6 +42,7 @@ app.use(lusca.hsts({ maxAge: 31536000 }));
 app.use(lusca.xssProtection(true));
 ```
 
+__Please note that you must use [express-session](https://github.com/expressjs/session), [cookie-session](https://github.com/expressjs/cookie-session), their express 3.x alternatives, or other session object management in order to use lusca.__
 
 
 ## API
@@ -42,6 +51,7 @@ app.use(lusca.xssProtection(true));
 ### lusca.csrf(options)
 
 * `key` String - Optional. The name of the CSRF token added to the model. Defaults to `_csrf`.
+* `secret` String - Optional. The key to place on the session object which maps to the server side token. Defaults to `_csrfSecret`.
 * `impl` Function - Optional. Custom implementation to generate a token.
 
 Enables [Cross Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_\(CSRF\)) (CSRF) headers.

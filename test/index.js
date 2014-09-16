@@ -20,7 +20,7 @@ describe('All', function () {
             app = mock(config);
 
         app.get('/', function (req, res) {
-            res.send(200);
+            res.status(200).end();
         });
 
 		request(app)
