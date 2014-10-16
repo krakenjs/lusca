@@ -11,7 +11,15 @@ Web application security middleware.
 ```js
 var express = require('express'),
 	app = express(),
+	session = require('express-session'),
 	lusca = require('lusca');
+
+//this or other session management will be required
+app.use(session({
+	secret: 'abc',
+	resave: true,
+	saveUninitialized: true
+}));
 
 app.use(lusca({
     csrf: true,
@@ -34,6 +42,7 @@ app.use(lusca.hsts({ maxAge: 31536000 }));
 app.use(lusca.xssProtection(true));
 ```
 
+__Please note that you must use [express-session](https://github.com/expressjs/session), [cookie-session](https://github.com/expressjs/cookie-session), their express 3.x alternatives, or other session object management in order to use lusca.__
 
 
 ## API

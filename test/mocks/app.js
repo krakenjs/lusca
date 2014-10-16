@@ -2,18 +2,36 @@
 
 
 var express = require('express'),
-    lusca = require('../..');
+	cookieParser = require('cookie-parser'),
+	cookieSession = require('cookie-session'),
+	session = require('express-session'),
+	bodyParser = require('body-parser'),
+	errorHandler = require('errorhandler'),
+	lusca = require('../..');
 
 
-module.exports = function (config) {
-    var app = express();
+module.exports = function (config, sessionType) {
+	var app = express();
 
-    app.use(express.cookieParser());
-    app.use(express.cookieSession({ secret: 'abc' }));
-    app.use(express.json());
-    app.use(express.urlencoded());
-    app.use(lusca(config));
-    app.use(express.errorHandler());
+	app.use(cookieParser());
+	if (sessionType === undefined || sessionType === 'session') {
+		app.use(session({
+			secret: 'abc',
+			resave: true,
+			saveUninitialized: true
+		}));
+	} else if (sessionType === "cookie") {
+		app.use(cookieSession({
+			secret: 'abc'
+		}));
+	}
 
-    return app;
+	app.use(bodyParser.json());
+	app.use(bodyParser.urlencoded({
+		extended: false
+	}));
+	(config !== undefined) ? app.use(lusca(config)) : console.log('no lusca');
+	app.use(errorHandler());
+
+	return app;
 };
