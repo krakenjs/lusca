@@ -98,6 +98,38 @@ describe('CSRF', function () {
                 });
         });
 
+        it('POST (403 Forbidden on invalid token) (session type: {value})', function (ctx, done) {
+            var mockConfig = (ctx.value === 'cookie') ? {
+                    csrf: {
+                        secret: 'csrfSecret'
+                    }
+                } : {
+                    csrf: true
+                },
+                app = mock(mockConfig, ctx.value);
+
+            app.all('/', function (req, res) {
+                res.status(200).send({
+                    token: Math.random()
+                });
+            });
+
+            request(app)
+                .get('/')
+                .end(function (err, res) {
+                    request(app)
+                        .post('/')
+                        .set('Cookie', mapCookies(res.headers['set-cookie']))
+                        .send({
+                            _csrf: res.body.token
+                        })
+                        .expect(403)
+                        .end(function (err, res) {
+                            done(err);
+                        });
+                });
+        });
+
 
         it('POST (403 Forbidden on no token) (session type: {value})', function (ctx, done) {
             var mockConfig = (ctx.value === 'cookie') ? {
