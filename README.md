@@ -29,7 +29,7 @@ app.use(lusca({
     csp: { /* ... */},
     xframe: 'SAMEORIGIN',
     p3p: 'ABCDEF',
-    hsts: {maxAge: 31536000, includeSubDomains: true},
+    hsts: {maxAge: 31536000, includeSubDomains: true, preload: true},
     xssProtection: true
 }));
 ```
@@ -104,9 +104,9 @@ Enables [Platform for Privacy Preferences Project](http://support.microsoft.com/
 
 * `options.maxAge` Number - Required. Number of seconds HSTS is in effect.
 * `options.includeSubDomains` Boolean - Optional. Applies HSTS to all subdomains of the host
+* `options.preload` Boolean - Optional. Adds preload flag
 
-Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_Strict_Transport_Security) for the host domain.
-
+Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_Strict_Transport_Security) for the host domain. The preload flag is required for HSTS domain submissions to [Chrome's HSTS preload list](https://hstspreload.appspot.com).
 
 
 ### lusca.xssProtection(options)

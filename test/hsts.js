@@ -60,6 +60,26 @@ describe('HSTS', function () {
     });
 
 
+    it('header (maxAge; includeSubDomains; preload)', function (done) {
+        var config = { hsts: { maxAge: 31536000, includeSubDomains: true, preload: true} },
+            app = mock(config);
+
+        app.get('/', function (req, res) {
+            res.status(200).end();
+        });
+
+        request(app)
+            .get('/')
+            .expect(
+                'Strict-Transport-Security',
+                'max-age=' + config.hsts.maxAge +
+                '; includeSubDomains' +
+                '; preload'
+            )
+            .expect(200, done);
+    });
+
+
     it('header (missing maxAge)', function (done) {
         var config = { hsts: {} },
             app = mock(config);
