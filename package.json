@@ -1,6 +1,6 @@
 {
   "name": "lusca",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Application security for express.",
   "main": "index",
   "scripts": {
