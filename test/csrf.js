@@ -342,4 +342,25 @@ describe('CSRF', function () {
                 });
         });
     });
+
+    it('Should set a cookie with the cookie option', function (done) {
+        var app = mock({ csrf: { cookie: 'CSRF' }});
+
+        app.all('/', function (req, res) {
+            res.status(200).send({
+                token: res.locals._csrf
+            });
+        });
+
+        request(app)
+            .get('/')
+            .end(function (err, res) {
+                function findToken(cookie) {
+                    cookie = decodeURIComponent(cookie);
+                    return ~cookie.indexOf(res.body.token);
+                }
+                assert(res.headers['set-cookie'].some(findToken));
+                done();
+            });
+    });
 });
