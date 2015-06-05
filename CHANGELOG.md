@@ -1,3 +1,7 @@
+##### v1.1.1
+
+* Fix csrf header case-sensitivity
+
 ##### v1.1.0
 
 * Add `preload` flag to HSTS options
