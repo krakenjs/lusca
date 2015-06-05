@@ -248,6 +248,39 @@ describe('CSRF', function () {
                 });
         });
 
+        it('Should be case-insensitive to custom headers', function (ctx, done) {
+            var mockConfig = (ctx.value === 'cookie') ? {
+                    csrf: {
+                        header: 'X-XSRF-TOKEN',
+                        secret: 'csrfSecret'
+                    }
+                } : {
+                    csrf: {
+                        header: 'X-XSRF-TOKEN'
+                    }
+                },
+                app = mock(mockConfig, ctx.value);
+
+            app.all('/', function (req, res) {
+                res.status(200).send({
+                    token: res.locals._csrf
+                });
+            });
+
+            request(app)
+                .get('/')
+                .end(function (err, res) {
+                    request(app)
+                        .post('/')
+                        .set('cookie', mapCookies(res.headers['set-cookie']))
+                        .set('X-xsrf-token', res.body.token)
+                        .send({
+                            name: 'Test'
+                        })
+                        .expect(200, done);
+                });
+        });
+
         it('Should allow custom secret key (session type: {value})', function (ctx, done) {
             var mockConfig = (ctx.value === 'cookie') ? {
                     csrf: {
