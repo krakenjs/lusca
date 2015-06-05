@@ -363,4 +363,35 @@ describe('CSRF', function () {
                 done();
             });
     });
+    it('Should set options correctly with an angular shorthand option', function (done) {
+        // https://docs.angularjs.org/api/ng/service/$http#cross-site-request-forgery-xsrf-protection
+        var cookieKey = 'XSRF-TOKEN';
+        var header = 'X-XSRF-TOKEN';
+        var app = mock({ csrf: { angular: true, secret: '_csrfSecret' }});
+
+        app.all('/', function (req, res) {
+            res.status(200).send({
+                token: res.locals._csrf
+            });
+        });
+
+        request(app)
+            .get('/')
+            .end(function (err, res) {
+                function findToken(cookie) {
+                    cookie = decodeURIComponent(cookie);
+                    return ~cookie.indexOf(cookieKey + '=' + res.body.token);
+                }
+                assert(res.headers['set-cookie'].some(findToken));
+
+                request(app)
+                    .post('/')
+                    .set('cookie', mapCookies(res.headers['set-cookie']))
+                    .set(header, res.body.token)
+                    .send({
+                        cool: 'stuff'
+                    })
+                    .expect(200, done);
+            });
+    });
 });
