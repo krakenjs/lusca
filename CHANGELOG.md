@@ -1,3 +1,7 @@
+##### v1.2.0
+
+* Add angular convenience wrapper around CSRF cookie configuration
+
 ##### v1.1.1
 
 * Fix csrf header case-sensitivity
