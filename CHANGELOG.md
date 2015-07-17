@@ -1,3 +1,7 @@
+##### v1.3.0
+
+* Add `req.csrfToken` method to (re)generate token
+
 ##### v1.2.0
 
 * Add angular convenience wrapper around CSRF cookie configuration
