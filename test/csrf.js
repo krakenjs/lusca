@@ -394,4 +394,100 @@ describe('CSRF', function () {
                     .expect(200, done);
             });
     });
+    dd(sessionOptions, function () {
+        it('Should return the cached token for valid session on req.csrfToken', function (ctx, done) {
+            var key = 'foo';
+            var mockConfig = (ctx.value === 'cookie') ? {
+                    csrf: {
+                        key: key,
+                        secret: 'csrfSecret'
+                    }
+                } : {
+                    csrf: {key: key}
+                },
+                app = mock(mockConfig, ctx.value);
+    
+            function callCsrfToken(req, res, next) {
+                var token = res.locals[key];
+                assert(req.csrfToken() === token, 'req.csrfToken should use cached token');
+                assert(res.locals[key] === token, 'req.csrfToken should not mutate token');
+                next();
+            }
+    
+            app.get('/', callCsrfToken, function (req, res) {
+                res.status(200).send({
+                    token: res.locals[key]
+                });
+            });
+    
+            app.post('/', function (req, res) {
+                res.status(200).send({
+                    token: res.locals[key]
+                });
+            });
+    
+            request(app)
+                .get('/')
+                .end(function (err, res) {
+                    var obj = {};
+                    obj[key] = res.body.token;
+
+                    request(app)
+                        .post('/')
+                        .set('Cookie', mapCookies(res.headers['set-cookie']))
+                        .send(obj)
+                        .expect(200, done);
+                });
+        });
+        it('Should generate a new token for invalid session on req.csrfToken', function (ctx, done) {
+            var key = 'foo',
+                secret = 'csrfSecret',
+                mockConfig = {
+                    csrf: {
+                        key: key,
+                        secret: secret
+                    }
+                },
+                app = mock(mockConfig, ctx.value);
+    
+            function destroy(req, res, next) {
+                delete req.session[secret];
+                next();
+            }
+
+            function callCsrfToken(req, res, next) {
+                var token = res.locals[key];
+                assert(req.csrfToken() !== token, 'req.csrfToken should not use cached token');
+                assert(res.locals[key] !== token, 'req.csrfToken should mutate token');
+                token = res.locals[key];
+                assert(req.csrfToken() === token, 'subsequent req.csrfToken should use cached token');
+                next();
+            }
+    
+            app.get('/', destroy, callCsrfToken, function (req, res) {
+                res.status(200).send({
+                    token: res.locals[key]
+                });
+            });
+    
+            app.post('/', function (req, res) {
+                res.status(200).send({
+                    token: res.locals[key]
+                });
+            });
+    
+            request(app)
+                .get('/')
+                .end(function (err, res) {
+                    var obj = {};
+                    obj[key] = res.body.token;
+
+                    request(app)
+                        .post('/')
+                        .set('Cookie', mapCookies(res.headers['set-cookie']))
+                        .send(obj)
+                        .expect(200, done);
+                });
+        });
+    });
 });
