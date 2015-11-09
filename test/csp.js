@@ -77,4 +77,20 @@ describe('CSP', function () {
             .expect('Content-Security-Policy', 'block-all-mixed-content; ')
             .expect(200, done);
     });
+
+    it('do not fail with null policy', function (done) {
+        var app = mock({
+            csp: {
+                policy: null,
+            }
+        });
+
+        app.get('/', function (req, res) {
+            res.status(200).end();
+        });
+
+        request(app)
+            .get('/')
+            .expect(200, done);
+    });
 });
