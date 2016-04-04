@@ -1,0 +1,6 @@
+{
+  "policy": [
+    {"default-src": "*"},
+    "img-src *"
+  ]
+}
