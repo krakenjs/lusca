@@ -53,11 +53,11 @@ __Please note that you must use [express-session](https://github.com/expressjs/s
 
 ### lusca.csrf(options)
 
-* `key` String - Optional. The name of the CSRF token added to the model. Defaults to `_csrf`.
-* `secret` String - Optional. The key to place on the session object which maps to the server side token. Defaults to `_csrfSecret`.
-* `impl` Function - Optional. Custom implementation to generate a token.
-* `cookie` String - Optional. If set, a cookie with the name you provide will be set with the CSRF token.
-* `angular` Boolean - Optional. Shorthand setting to set `lusca` up to use the default settings for CSRF validation according to the [AngularJS docs].
+* `options.key` String - Optional. The name of the CSRF token added to the model. Defaults to `_csrf`.
+* `options.secret` String - Optional. The key to place on the session object which maps to the server side token. Defaults to `_csrfSecret`.
+* `options.impl` Function - Optional. Custom implementation to generate a token.
+* `options.cookie` String - Optional. If set, a cookie with the name you provide will be set with the CSRF token.
+* `options.angular` Boolean - Optional. Shorthand setting to set `lusca` up to use the default settings for CSRF validation according to the [AngularJS docs].
 
 [angularjs docs]: https://docs.angularjs.org/api/ng/service/$http#cross-site-request-forgery-xsrf-protection
 
@@ -72,6 +72,7 @@ Furthermore, parsers must be registered before lusca.
 * `options.policy` Object - Object definition of policy.
 * `options.reportOnly` Boolean - Enable report only mode.
 * `options.reportUri` String - URI where to send the report data
+* `options.impl` Function - Custom implementation to create a report-uri (higher priority than `options.reportUri`)
 
 Enables [Content Security Policy](https://www.owasp.org/index.php/Content_Security_Policy) (CSP) headers.
 

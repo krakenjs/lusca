@@ -30,6 +30,21 @@ describe('CSP', function () {
     });
 
 
+    it('header (report) - allows custom report-uri impl function', function (done) {
+        var config = require('./mocks/config/cspReportUriImpl'),
+            app = mock({ csp: config });
+
+        app.get('/', function (req, res) {
+            res.status(200).end();
+        });
+
+        request(app)
+            .get('/')
+            .expect('Content-Security-Policy-Report-Only', 'default-src *; report-uri http://www.example.com?token=sometoken')
+            .expect(200, done);
+    });
+
+
     it('header (enforce)', function (done) {
         var config = require('./mocks/config/cspEnforce'),
             app = mock({ csp: config });
