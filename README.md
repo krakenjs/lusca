@@ -69,7 +69,7 @@ Furthermore, parsers must be registered before lusca.
 
 ### lusca.csp(options)
 
-* `options.policy` Object - Object definition of policy.
+* `options.policy` Object/String/Array - Definition of policy.
 * `options.reportOnly` Boolean - Enable report only mode.
 * `options.reportUri` String - URI where to send the report data
 
@@ -84,6 +84,13 @@ Enables [Content Security Policy](https://www.owasp.org/index.php/Content_Securi
     'default-src': '\'self\'',
     'img-src': '*'
   }
+}
+```
+
+```js
+// Block HTTP resources
+{
+  policy: ['block-all-mixed-content', 'upgrade-insecure-requests']
 }
 ```
 
