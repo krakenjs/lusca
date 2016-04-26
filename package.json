@@ -40,5 +40,8 @@
     "grunt-mocha-test": "~0.7.0",
     "jshint": "*",
     "supertest": "^0.13.0"
+  },
+  "dependencies": {
+    "core-util-is": "^1.0.2"
   }
 }

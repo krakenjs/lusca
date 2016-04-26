@@ -69,7 +69,10 @@ Furthermore, parsers must be registered before lusca.
 
 ### lusca.csp(options)
 
-* `options.policy` Object - Object definition of policy.
+* `options.policy` String, Object, or an Array - Object definition of policy. Valid policies examples include:
+  * `{"default-src": "*"}`
+  * `"referrer no-referrer"`
+  * `[{ "img-src": "'self' http:" }, "block-all-mixed-content"]`
 * `options.reportOnly` Boolean - Enable report only mode.
 * `options.reportUri` String - URI where to send the report data
 
