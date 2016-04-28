@@ -61,3 +61,4 @@ lusca.hsts = require('./lib/hsts');
 lusca.p3p = require('./lib/p3p');
 lusca.xframe = require('./lib/xframes');
 lusca.xssProtection = require('./lib/xssprotection');
+lusca.nosniff = require('./lib/nosniff');
