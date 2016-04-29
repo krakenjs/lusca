@@ -44,7 +44,7 @@ app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.p3p('ABCDEF'));
 app.use(lusca.hsts({ maxAge: 31536000 }));
 app.use(lusca.xssProtection(true));
-app.use(lusca.nosniff(true));
+app.use(lusca.nosniff());
 ```
 
 __Please note that you must use [express-session](https://github.com/expressjs/session), [cookie-session](https://github.com/expressjs/cookie-session), their express 3.x alternatives, or other session object management in order to use lusca.__
@@ -67,14 +67,10 @@ Enables [Cross Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_
 
 If enabled, the CSRF token must be in the payload when modifying data or you will receive a *403 Forbidden*. To send the token you'll need to echo back the `_csrf` value you received from the previous request.
 
-Furthermore, parsers must be registered before lusca. 
 
 ### lusca.csp(options)
 
-* `options.policy` String, Object, or an Array - Object definition of policy. Valid policies examples include:
-  * `{"default-src": "*"}`
-  * `"referrer no-referrer"`
-  * `[{ "img-src": "'self' http:" }, "block-all-mixed-content"]`
+* `options.policy` Object - Object definition of policy.
 * `options.reportOnly` Boolean - Enable report only mode.
 * `options.reportUri` String - URI where to send the report data
 
@@ -127,6 +123,6 @@ Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_St
 Enables [X-XSS-Protection](http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-security-part-iv-the-xss-filter.aspx) headers to help prevent cross site scripting (XSS) attacks in older IE browsers (IE8)
 
 
-### lusca.nosniff(true)
+### lusca.nosniff()
 
-Enables [X-Content-Type-Options](https://blogs.msdn.microsoft.com/ie/2008/09/02/ie8-security-part-vi-beta-2-update/) header to prevent MIME-sniffing a response away from the declared content-type.  Defaults to false.
+Enables [X-Content-Type-Options](https://blogs.msdn.microsoft.com/ie/2008/09/02/ie8-security-part-vi-beta-2-update/) header to prevent MIME-sniffing a response away from the declared content-type.  Defaults to off.
