@@ -1,5 +1,10 @@
 ##### v1.3.0
 
+* Add `nosniff` middleware
+* Add new method signatures for more flexible csp configuration
+
+##### v1.3.0
+
 * Add `req.csrfToken` method to (re)generate token
 
 ##### v1.2.0
