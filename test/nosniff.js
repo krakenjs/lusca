@@ -25,7 +25,7 @@ describe('nosniff', function () {
 
         request(app)
             .get('/')
-            .expect('X-Content-Type-Options', 'no sniff')
+            .expect('X-Content-Type-Options', 'nosniff')
             .expect(200, done);
     });
 });
