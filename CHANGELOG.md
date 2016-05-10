@@ -1,4 +1,8 @@
-##### v1.3.0
+##### v1.4.1
+
+* Bugfix: typo in `nosniff` header
+
+##### v1.4.0
 
 * Add `nosniff` middleware
 * Add new method signatures for more flexible csp configuration
