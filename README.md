@@ -4,7 +4,8 @@ lusca
 Lead Maintainer: [Jean-Charles Sisk](https://github.com/jasisk)  
 
 [![Build Status](https://travis-ci.org/krakenjs/lusca.svg?branch=master)](https://travis-ci.org/krakenjs/lusca)  
-[![NPM version](https://badge.fury.io/js/lusca.svg)](http://badge.fury.io/js/lusca)  
+[![NPM version](https://badge.fury.io/js/lusca.svg)](http://badge.fury.io/js/lusca)
+[!License](https://img.shields.io/badge/license-Apache-blue.svg)(https://github.com/krakenjs/lusca/blob/master/LICENSE.txt)
 
 Web application security middleware.
 
