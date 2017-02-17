@@ -31,7 +31,8 @@ app.use(lusca({
     p3p: 'ABCDEF',
     hsts: {maxAge: 31536000, includeSubDomains: true, preload: true},
     xssProtection: true,
-    nosniff: true
+    nosniff: true,
+    referrerPolicy: 'same-origin'
 }));
 ```
 
@@ -45,6 +46,7 @@ app.use(lusca.p3p('ABCDEF'));
 app.use(lusca.hsts({ maxAge: 31536000 }));
 app.use(lusca.xssProtection(true));
 app.use(lusca.nosniff());
+app.use(lusca.referrerPolicy('same-origin'));
 ```
 
 __Please note that you must use [express-session](https://github.com/expressjs/session), [cookie-session](https://github.com/expressjs/cookie-session), their express 3.x alternatives, or other session object management in order to use lusca.__
@@ -67,7 +69,7 @@ Enables [Cross Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_
 
 If enabled, the CSRF token must be in the payload when modifying data or you will receive a *403 Forbidden*. To send the token you'll need to echo back the `_csrf` value you received from the previous request.
 
-Furthermore, parsers must be registered before lusca. 
+Furthermore, parsers must be registered before lusca.
 
 ### lusca.csp(options)
 
@@ -130,3 +132,10 @@ Enables [X-XSS-Protection](http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-sec
 ### lusca.nosniff()
 
 Enables [X-Content-Type-Options](https://blogs.msdn.microsoft.com/ie/2008/09/02/ie8-security-part-vi-beta-2-update/) header to prevent MIME-sniffing a response away from the declared content-type.
+
+
+### lusca.referrerPolicy(value)
+
+* `value` String - Optional. The value for the header, e.g. `origin`, `same-origin`, `no-referrer`. Defaults to `` (empty string).
+
+Enables [Referrer-Policy](https://www.w3.org/TR/referrer-policy/#intro) header to control the Referer header.
