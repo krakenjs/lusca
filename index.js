@@ -46,6 +46,7 @@ var lusca = module.exports = function (options) {
                         return;
                     }
                     header(req, res, next);
+                    return;
                 };
             }(chain));
         });
