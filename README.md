@@ -58,8 +58,10 @@ __Please note that you must use [express-session](https://github.com/expressjs/s
 * `key` String - Optional. The name of the CSRF token added to the model. Defaults to `_csrf`.
 * `secret` String - Optional. The key to place on the session object which maps to the server side token. Defaults to `_csrfSecret`.
 * `impl` Function - Optional. Custom implementation to generate a token.
-* `cookie` String - Optional. If set, a cookie with the name you provide will be set with the CSRF token.
-* `angular` Boolean - Optional. Shorthand setting to set `lusca` up to use the default settings for CSRF validation according to the [AngularJS docs].
+* `cookie` String|Object - Optional. If set, a cookie with the name and/or options you provide will be set with the CSRF token. If the value is a string, it'll be used as the cookie name.
+* `cookie.name` String - Required if cookie is an object and `angular` is not true. The CSRF cookie name to set.
+* `cookie.options` Object - Optional. A valid Express cookie options object.
+* `angular` Boolean - Optional. Shorthand setting to set `lusca` up to use the default settings for CSRF validation according to the [AngularJS docs]. Can be used with `cookie.options`.
 
 [angularjs docs]: https://docs.angularjs.org/api/ng/service/$http#cross-site-request-forgery-xsrf-protection
 
