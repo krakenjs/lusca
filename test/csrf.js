@@ -343,6 +343,48 @@ describe('CSRF', function () {
         });
     });
 
+    it('Should not set a cookie without the cookie option', function (done) {
+        var app = mock({ csrf: {}});
+
+        app.all('/', function (req, res) {
+            res.status(200).send({
+                token: res.locals._csrf
+            });
+        });
+
+        request(app)
+            .get('/')
+            .end(function (err, res) {
+                function findToken(cookie) {
+                    cookie = decodeURIComponent(cookie);
+                    return !~cookie.indexOf(res.body.token);
+                }
+                assert(res.headers['set-cookie'].some(findToken));
+                done();
+            });
+    });
+    it('Should not set a cookie without the cookie name option', function (done) {
+        var app = mock({ csrf: {
+            cookie: {}
+        }});
+
+        app.all('/', function (req, res) {
+            res.status(200).send({
+                token: res.locals._csrf
+            });
+        });
+
+        request(app)
+            .get('/')
+            .end(function (err, res) {
+                function findToken(cookie) {
+                    cookie = decodeURIComponent(cookie);
+                    return !~cookie.indexOf(res.body.token);
+                }
+                assert(res.headers['set-cookie'].some(findToken));
+                done();
+            });
+    });
     it('Should set a cookie with the cookie option', function (done) {
         var app = mock({ csrf: { cookie: 'CSRF' }});
 
@@ -361,6 +403,157 @@ describe('CSRF', function () {
                 }
                 assert(res.headers['set-cookie'].some(findToken));
                 done();
+            });
+    });
+    it('Should set a cookie with the cookie name option', function (done) {
+        var app = mock({ csrf: { cookie: { name : 'CSRF' }}});
+
+        app.all('/', function (req, res) {
+            res.status(200).send({
+                token: res.locals._csrf
+            });
+        });
+
+        request(app)
+            .get('/')
+            .end(function (err, res) {
+                function findToken(cookie) {
+                    cookie = decodeURIComponent(cookie);
+                    return ~cookie.indexOf(res.body.token);
+                }
+                assert(res.headers['set-cookie'].some(findToken));
+                done();
+            });
+    });
+    it('Should set cookie httpOnly option correctly', function (done) {
+        // https://docs.angularjs.org/api/ng/service/$http#cross-site-request-forgery-xsrf-protection
+        var cookieKey = 'XSRF-TOKEN';
+        var header = 'X-XSRF-TOKEN';
+        var app = mock({
+            csrf: {
+                cookie: {
+                    name: cookieKey,
+                    options: {
+                        httpOnly: true
+                    }
+                },
+                header: header,
+                secret: '_csrfSecret'
+            }
+        });
+
+        app.all('/', function (req, res) {
+            res.status(200).send({
+                token: res.locals._csrf
+            });
+        });
+
+        request(app)
+            .get('/')
+            .end(function (err, res) {
+                function findToken(cookie) {
+                    cookie = decodeURIComponent(cookie);
+                    return ~cookie.indexOf(cookieKey + '=' + res.body.token) &&
+                        ~cookie.indexOf('HttpOnly');
+                }
+                assert(res.headers['set-cookie'].some(findToken));
+
+                request(app)
+                    .post('/')
+                    .set('cookie', mapCookies(res.headers['set-cookie']))
+                    .set(header, res.body.token)
+                    .send({
+                        cool: 'stuff'
+                    })
+                    .expect(200, done);
+            });
+    });
+    it('Should set cookie secure option correctly', function (done) {
+        // https://docs.angularjs.org/api/ng/service/$http#cross-site-request-forgery-xsrf-protection
+        var cookieKey = 'XSRF-TOKEN';
+        var header = 'X-XSRF-TOKEN';
+        var app = mock({
+            csrf: {
+                cookie: {
+                    name: cookieKey,
+                    options: {
+                        secure: true
+                    }
+                },
+                header: header,
+                secret: '_csrfSecret'
+            }
+        });
+
+        app.all('/', function (req, res) {
+            res.status(200).send({
+                token: res.locals._csrf
+            });
+        });
+
+        request(app)
+            .get('/')
+            .end(function (err, res) {
+                function findToken(cookie) {
+                    cookie = decodeURIComponent(cookie);
+                    return ~cookie.indexOf(cookieKey + '=' + res.body.token) &&
+                        ~cookie.indexOf('Secure');
+                }
+                assert(res.headers['set-cookie'].some(findToken));
+
+                request(app)
+                    .post('/')
+                    .set('cookie', mapCookies(res.headers['set-cookie']))
+                    .set(header, res.body.token)
+                    .send({
+                        cool: 'stuff'
+                    })
+                    .expect(200, done);
+            });
+    });
+    it('Should set cookie secure and httpOnly options correctly', function (done) {
+        // https://docs.angularjs.org/api/ng/service/$http#cross-site-request-forgery-xsrf-protection
+        var cookieKey = 'XSRF-TOKEN';
+        var header = 'X-XSRF-TOKEN';
+        var app = mock({
+            csrf: {
+                cookie: {
+                    name: cookieKey,
+                    options: {
+                        httpOnly: true,
+                        secure: true
+                    }
+                },
+                header: header,
+                secret: '_csrfSecret'
+            }
+        });
+
+        app.all('/', function (req, res) {
+            res.status(200).send({
+                token: res.locals._csrf
+            });
+        });
+
+        request(app)
+            .get('/')
+            .end(function (err, res) {
+                function findToken(cookie) {
+                    cookie = decodeURIComponent(cookie);
+                    return ~cookie.indexOf(cookieKey + '=' + res.body.token) &&
+                        ~cookie.indexOf('HttpOnly') &&
+                        ~cookie.indexOf('Secure');
+                }
+                assert(res.headers['set-cookie'].some(findToken));
+
+                request(app)
+                    .post('/')
+                    .set('cookie', mapCookies(res.headers['set-cookie']))
+                    .set(header, res.body.token)
+                    .send({
+                        cool: 'stuff'
+                    })
+                    .expect(200, done);
             });
     });
     it('Should set options correctly with an angular shorthand option', function (done) {
@@ -394,6 +587,134 @@ describe('CSRF', function () {
                     .expect(200, done);
             });
     });
+    it('Should set cookie httpOnly option correctly with an angular shorthand option', function (done) {
+        // https://docs.angularjs.org/api/ng/service/$http#cross-site-request-forgery-xsrf-protection
+        var cookieKey = 'XSRF-TOKEN';
+        var header = 'X-XSRF-TOKEN';
+        var app = mock({
+            csrf: {
+                secret: '_csrfSecret',
+                angular: true,
+                cookie: {
+                    options: {
+                        httpOnly: true
+                    }
+                }
+            }
+        });
+
+        app.all('/', function (req, res) {
+            res.status(200).send({
+                token: res.locals._csrf
+            });
+        });
+
+        request(app)
+            .get('/')
+            .end(function (err, res) {
+                function findToken(cookie) {
+                    cookie = decodeURIComponent(cookie);
+                    return ~cookie.indexOf(cookieKey + '=' + res.body.token) &&
+                        ~cookie.indexOf('HttpOnly');
+                }
+                assert(res.headers['set-cookie'].some(findToken));
+
+                request(app)
+                    .post('/')
+                    .set('cookie', mapCookies(res.headers['set-cookie']))
+                    .set(header, res.body.token)
+                    .send({
+                        cool: 'stuff'
+                    })
+                    .expect(200, done);
+            });
+    });
+    it('Should set cookie secure option correctly with an angular shorthand option', function (done) {
+        // https://docs.angularjs.org/api/ng/service/$http#cross-site-request-forgery-xsrf-protection
+        var cookieKey = 'XSRF-TOKEN';
+        var header = 'X-XSRF-TOKEN';
+        var app = mock({
+            csrf: {
+                secret: '_csrfSecret',
+                angular: true,
+                cookie: {
+                    options: {
+                        secure: true
+                    }
+                }
+            }
+        });
+
+        app.all('/', function (req, res) {
+            res.status(200).send({
+                token: res.locals._csrf
+            });
+        });
+
+        request(app)
+            .get('/')
+            .end(function (err, res) {
+                function findToken(cookie) {
+                    cookie = decodeURIComponent(cookie);
+                    return ~cookie.indexOf(cookieKey + '=' + res.body.token) &&
+                        ~cookie.indexOf('Secure');
+                }
+                assert(res.headers['set-cookie'].some(findToken));
+
+                request(app)
+                    .post('/')
+                    .set('cookie', mapCookies(res.headers['set-cookie']))
+                    .set(header, res.body.token)
+                    .send({
+                        cool: 'stuff'
+                    })
+                    .expect(200, done);
+            });
+    });
+    it('Should set cookie secure and httpOnly option correctly with an angular shorthand option', function (done) {
+        // https://docs.angularjs.org/api/ng/service/$http#cross-site-request-forgery-xsrf-protection
+        var cookieKey = 'XSRF-TOKEN';
+        var header = 'X-XSRF-TOKEN';
+        var app = mock({
+            csrf: {
+                secret: '_csrfSecret',
+                angular: true,
+                cookie: {
+                    options: {
+                        httpOnly: true,
+                        secure: true
+                    }
+                }
+            }
+        });
+
+        app.all('/', function (req, res) {
+            res.status(200).send({
+                token: res.locals._csrf
+            });
+        });
+
+        request(app)
+            .get('/')
+            .end(function (err, res) {
+                function findToken(cookie) {
+                    cookie = decodeURIComponent(cookie);
+                    return ~cookie.indexOf(cookieKey + '=' + res.body.token) &&
+                        ~cookie.indexOf('HttpOnly') &&
+                        ~cookie.indexOf('Secure');
+                }
+                assert(res.headers['set-cookie'].some(findToken));
+
+                request(app)
+                    .post('/')
+                    .set('cookie', mapCookies(res.headers['set-cookie']))
+                    .set(header, res.body.token)
+                    .send({
+                        cool: 'stuff'
+                    })
+                    .expect(200, done);
+            });
+    });
     dd(sessionOptions, function () {
         it('Should return the cached token for valid session on req.csrfToken', function (ctx, done) {
             var key = 'foo';
@@ -406,26 +727,26 @@ describe('CSRF', function () {
                     csrf: {key: key}
                 },
                 app = mock(mockConfig, ctx.value);
-    
+
             function callCsrfToken(req, res, next) {
                 var token = res.locals[key];
                 assert(req.csrfToken() === token, 'req.csrfToken should use cached token');
                 assert(res.locals[key] === token, 'req.csrfToken should not mutate token');
                 next();
             }
-    
+
             app.get('/', callCsrfToken, function (req, res) {
                 res.status(200).send({
                     token: res.locals[key]
                 });
             });
-    
+
             app.post('/', function (req, res) {
                 res.status(200).send({
                     token: res.locals[key]
                 });
             });
-    
+
             request(app)
                 .get('/')
                 .end(function (err, res) {
@@ -449,7 +770,7 @@ describe('CSRF', function () {
                     }
                 },
                 app = mock(mockConfig, ctx.value);
-    
+
             function destroy(req, res, next) {
                 delete req.session[secret];
                 next();
@@ -463,19 +784,19 @@ describe('CSRF', function () {
                 assert(req.csrfToken() === token, 'subsequent req.csrfToken should use cached token');
                 next();
             }
-    
+
             app.get('/', destroy, callCsrfToken, function (req, res) {
                 res.status(200).send({
                     token: res.locals[key]
                 });
             });
-    
+
             app.post('/', function (req, res) {
                 res.status(200).send({
                     token: res.locals[key]
                 });
             });
-    
+
             request(app)
                 .get('/')
                 .end(function (err, res) {
