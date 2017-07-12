@@ -1,10 +1,6 @@
-lusca
-=====
+# lusca
 
-Lead Maintainer: [Jean-Charles Sisk](https://github.com/jasisk)  
-
-[![Build Status](https://travis-ci.org/krakenjs/lusca.svg?branch=master)](https://travis-ci.org/krakenjs/lusca)  
-[![NPM version](https://badge.fury.io/js/lusca.svg)](http://badge.fury.io/js/lusca)  
+[![Build Status](https://travis-ci.org/krakenjs/lusca.svg?branch=master)](https://travis-ci.org/krakenjs/lusca) [![NPM version](https://badge.fury.io/js/lusca.svg)](http://badge.fury.io/js/lusca)  
 
 Web application security middleware.
 
@@ -67,7 +63,7 @@ Enables [Cross Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_
 
 If enabled, the CSRF token must be in the payload when modifying data or you will receive a *403 Forbidden*. To send the token you'll need to echo back the `_csrf` value you received from the previous request.
 
-Furthermore, parsers must be registered before lusca. 
+Furthermore, parsers must be registered before lusca.
 
 ### lusca.csp(options)
 
