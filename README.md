@@ -54,6 +54,7 @@ __Please note that you must use [express-session](https://github.com/expressjs/s
 * `key` String - Optional. The name of the CSRF token added to the model. Defaults to `_csrf`.
 * `secret` String - Optional. The key to place on the session object which maps to the server side token. Defaults to `_csrfSecret`.
 * `impl` Function - Optional. Custom implementation to generate a token.
+* `header` String - Optional. If set, the header name you provide will be set with the CSRF token.
 * `cookie` String - Optional. If set, a cookie with the name you provide will be set with the CSRF token.
 * `angular` Boolean - Optional. Shorthand setting to set `lusca` up to use the default settings for CSRF validation according to the [AngularJS docs].
 
