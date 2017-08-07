@@ -1,3 +1,12 @@
+##### v1.5.0
+
+* Support for nonce for either style-src, script-src, or both
+* Lower case headers for improved performance
+* Support for referrer-policy
+* Allow CSRF cookie options to be set
+* Bugfix: return to suppress promise warning
+
+
 ##### v1.4.1
 
 * Bugfix: typo in `nosniff` header
