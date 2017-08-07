@@ -42,5 +42,7 @@
     "jshint": "*",
     "supertest": "^0.13.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "tsscmp": "^1.0.5"
+  }
 }
