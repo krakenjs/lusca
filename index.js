@@ -24,7 +24,8 @@ var crypto  = require('crypto');
  * @param {Object} options The configuration object.
  */
 var lusca = module.exports = function (options) {
-    var headers = [], nonce;
+    var headers = [];
+    var nonce;
 
     if (options) {
         Object.keys(lusca).forEach(function (key) {
@@ -32,8 +33,6 @@ var lusca = module.exports = function (options) {
             if (key === "csp" && options[key] && (options[key]['styleNonce'] || options[key]['scriptNonce'])) {
                 nonce = true;
             }
-
-            //if (key === 'csp' && lusca[key](config) && lusca[key](config)[styleNonce]) 
 
             if (config) {
                 headers.push(lusca[key](config));
@@ -57,8 +56,7 @@ var lusca = module.exports = function (options) {
                         next(err);
                         return;
                     }
-                    header(req, res, next);
-                    return;
+                    return header(req, res, next);
                 };
             }(chain));
         });
