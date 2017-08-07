@@ -16,6 +16,7 @@
 │   limitations under the License.                                            │
 \*───────────────────────────────────────────────────────────────────────────*/
 'use strict';
+var crypto  = require('crypto');
 
 
 /**
@@ -24,10 +25,14 @@
  */
 var lusca = module.exports = function (options) {
     var headers = [];
+    var nonce;
 
     if (options) {
         Object.keys(lusca).forEach(function (key) {
             var config = options[key];
+            if (key === "csp" && options[key] && (options[key]['styleNonce'] || options[key]['scriptNonce'])) {
+                nonce = true;
+            }
 
             if (config) {
                 headers.push(lusca[key](config));
@@ -38,6 +43,12 @@ var lusca = module.exports = function (options) {
     return function lusca(req, res, next) {
         var chain = next;
 
+        if (nonce) {
+            Object.defineProperty(res.locals, 'nonce', {
+                value: crypto.pseudoRandomBytes(36).toString('base64'),
+                enumerable: true
+            });
+        }
         headers.forEach(function (header) {
             chain = (function (next) {
                 return function (err) {
@@ -45,7 +56,7 @@ var lusca = module.exports = function (options) {
                         next(err);
                         return;
                     }
-                    header(req, res, next);
+                    return header(req, res, next);
                 };
             }(chain));
         });

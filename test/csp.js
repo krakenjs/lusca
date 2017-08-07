@@ -94,4 +94,34 @@ describe('CSP', function () {
                 .expect(200, done);
         });
     });
+
+    describe('nonce checks', function () {
+        it('no nonce specified', function (done) {
+            var config = require('./mocks/config/cspEnforce'),
+            app = mock({ csp: config });
+
+            app.get('/', function (req, res) {
+                res.status(200).end();
+            });
+
+            request(app)
+                .get('/')
+                .expect('Content-Security-Policy', /^(?!.*nonce).*$/)
+                .expect(200, done);
+        });
+
+        it('nonce specified', function (done) {
+            var config = require('./mocks/config/nonce'),
+            app = mock({ csp: config });
+
+            app.get('/', function (req, res) {
+                res.status(200).end();
+            });
+
+            request(app)
+                .get('/')
+                .expect('Content-Security-Policy', /nonce/)
+                .expect(200, done);
+        });
+    });
 });
