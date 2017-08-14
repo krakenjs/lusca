@@ -1,3 +1,8 @@
+##### v1.5.1
+
+* Bugfix: style-src nonce updates properly, speed improvement on match
+
+
 ##### v1.5.0
 
 * Support for nonce for either style-src, script-src, or both
