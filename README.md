@@ -108,7 +108,7 @@ Enables X-FRAME-OPTIONS headers to help prevent [Clickjacking](https://www.owasp
 
 * `value` String - Required. The compact privacy policy.
 
-Enables [Platform for Privacy Preferences Project](http://support.microsoft.com/kb/290333) (P3P) headers.
+Enables [Platform for Privacy Preferences Project](https://www.w3.org/P3P) (P3P) headers.
 
 
 
