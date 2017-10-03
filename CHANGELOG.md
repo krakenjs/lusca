@@ -1,3 +1,7 @@
+##### v1.5.2
+
+* Bugfix: Add style/script directive if nonce is true
+
 ##### v1.5.1
 
 * Bugfix: style-src nonce updates properly, speed improvement on match
