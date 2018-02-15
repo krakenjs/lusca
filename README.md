@@ -63,6 +63,8 @@ __Please note that you must use [express-session](https://github.com/expressjs/s
 * `blacklist` Array or String - Optional. Allows defining a set of routes that will not have csrf protection.  All others will.
 * `whitelist` Array or String - Optional. Allows defining a set of routes that will have csrf protection.  All others will not.
 
+Note: The app should use either a `blacklist` or a `whitelist`, not both.
+
 [angularjs docs]: https://docs.angularjs.org/api/ng/service/$http#cross-site-request-forgery-xsrf-protection
 
 Enables [Cross Site Request Forgery](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_\(CSRF\)) (CSRF) headers.
