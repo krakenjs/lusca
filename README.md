@@ -60,6 +60,8 @@ __Please note that you must use [express-session](https://github.com/expressjs/s
 * `cookie.name` String - Required if cookie is an object and `angular` is not true. The CSRF cookie name to set.
 * `cookie.options` Object - Optional. A valid Express cookie options object.
 * `angular` Boolean - Optional. Shorthand setting to set `lusca` up to use the default settings for CSRF validation according to the [AngularJS docs]. Can be used with `cookie.options`.
+* `blacklist` Array or String - Optional. Allows defining a set of routes that will not have csrf protection.  All others will.
+* `whitelist` Array or String - Optional. Allows defining a set of routes that will have csrf protection.  All others will not.
 
 [angularjs docs]: https://docs.angularjs.org/api/ng/service/$http#cross-site-request-forgery-xsrf-protection
 
