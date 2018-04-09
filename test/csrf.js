@@ -42,6 +42,60 @@ describe('CSRF', function () {
                 done(err);
             });
     });
+    it('should not require token on post to blacklist', function (done) {
+        var app = mock({
+            csrf: {
+                blacklist: ['/blacklist']
+            }
+        });
+
+        app.post('/blacklist', function (req, res) {
+            res.send(200);
+        });
+
+        app.post('/notblacklist', function (req, res) {
+            res.send(200);
+        });
+
+        request(app)
+            .post('/blacklist')
+            .expect(200)
+            .end(function (err, res) {});
+
+        request(app)
+            .post('/notblacklist')
+            .expect(403)
+            .end(function (err, res) {
+                done(err);
+            });
+    });
+    it('should only require token on post to whitelist', function (done) {
+        var app = mock({
+            csrf: {
+                whitelist: ['/whitelist']
+            }
+        });
+
+        app.post('/whitelist', function (req, res) {
+            res.send(200);
+        });
+
+        app.post('/notwhitelist', function (req, res) {
+            res.send(200);
+        });
+
+        request(app)
+            .post('/whitelist')
+            .expect(403)
+            .end(function (err, res) {});
+
+        request(app)
+            .post('/notwhitelist')
+            .expect(200)
+            .end(function (err, res) {
+                done(err);
+            });
+    });
     dd(sessionOptions, function () {
         it('GETs have a CSRF token (session type: {value})', function (ctx, done) {
             var mockConfig = (ctx.value === 'cookie') ? {
