@@ -1,3 +1,7 @@
+##### v1.6.0
+
+* Adds in `whitelist` and `blacklist` support for `csrf`
+
 ##### v1.5.2
 
 * Bugfix: Add style/script directive if nonce is true
