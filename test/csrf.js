@@ -45,11 +45,15 @@ describe('CSRF', function () {
     it('should not require token on post to blacklist', function (done) {
         var app = mock({
             csrf: {
-                blacklist: ['/blacklist']
+                blacklist: ['/blacklist1', '/blacklist2']
             }
         });
 
-        app.post('/blacklist', function (req, res) {
+        app.post('/blacklist1', function (req, res) {
+            res.send(200);
+        });
+
+        app.post('/blacklist2', function (req, res) {
             res.send(200);
         });
 
@@ -58,7 +62,12 @@ describe('CSRF', function () {
         });
 
         request(app)
-            .post('/blacklist')
+            .post('/blacklist1')
+            .expect(200)
+            .end(function (err, res) {});
+
+        request(app)
+            .post('/blacklist2')
             .expect(200)
             .end(function (err, res) {});
 
@@ -72,11 +81,15 @@ describe('CSRF', function () {
     it('should only require token on post to whitelist', function (done) {
         var app = mock({
             csrf: {
-                whitelist: ['/whitelist']
+                whitelist: ['/whitelist1', '/whitelist2']
             }
         });
 
-        app.post('/whitelist', function (req, res) {
+        app.post('/whitelist1', function (req, res) {
+            res.send(200);
+        });
+
+        app.post('/whitelist2', function (req, res) {
             res.send(200);
         });
 
@@ -85,7 +98,12 @@ describe('CSRF', function () {
         });
 
         request(app)
-            .post('/whitelist')
+            .post('/whitelist1')
+            .expect(403)
+            .end(function (err, res) {});
+        
+        request(app)
+            .post('/whitelist2')
             .expect(403)
             .end(function (err, res) {});
 
