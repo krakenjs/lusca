@@ -81,8 +81,8 @@ Furthermore, parsers must be registered before lusca.
   * `[{ "img-src": "'self' http:" }, "block-all-mixed-content"]`
 * `options.reportOnly` Boolean - Enable report only mode.
 * `options.reportUri` String - URI where to send the report data
-* `options.styleNonce` Boolean - Enable nonce for inline style-src, access from `req.locals.nonce`
-* `options.scriptNonce` Boolean - Enable nonce for inline script-src, access from `req.locals.nonce`
+* `options.styleNonce` Boolean - Enable nonce for inline style-src, access from `res.locals.nonce`
+* `options.scriptNonce` Boolean - Enable nonce for inline script-src, access from `res.locals.nonce`
 
 Enables [Content Security Policy](https://www.owasp.org/index.php/Content_Security_Policy) (CSP) headers.
 
