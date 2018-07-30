@@ -1,3 +1,8 @@
+##### v1.6.1
+
+* Fixes issue with multiple `blacklist`/`whitelist` options
+* Typo in README
+
 ##### v1.6.0
 
 * Adds in `whitelist` and `blacklist` support for `csrf`
