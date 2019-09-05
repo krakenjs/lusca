@@ -45,31 +45,40 @@ describe('CSRF', function () {
     it('should not require token on post to blacklist', function (done) {
         var app = mock({
             csrf: {
-				blacklist: ['/blacklist', '/anotherblacklist']
+                blacklist: ['/blacklist', '/anotherblacklist']
             }
         });
 
-        app.post('/blacklist', function (req, res) {
+        app.post('/blacklist1', function (req, res) {
             res.send(200);
-		});
+        });
 
-		app.post('/anotherblacklist', function (req, res) {
-			res.send(200);
-		});
+        app.post('/blacklist2', function (req, res) {
+            res.send(200);
+        });
+
+        app.post('/anotherblacklist', function (req, res) {
+            res.send(200);
+        });
 
         app.post('/notblacklist', function (req, res) {
             res.send(200);
         });
 
         request(app)
-            .post('/blacklist')
+            .post('/blacklist1')
             .expect(200)
-			.end(function (err, res) { });
+            .end(function (err, res) {});
 
-		request(app)
-			.post('/anotherblacklist')
-			.expect(200)
-			.end(function (err, res) { });
+        request(app)
+            .post('/blacklist2')
+            .expect(200)
+            .end(function (err, res) { });
+
+        request(app)
+            .post('/anotherblacklist')
+            .expect(200)
+            .end(function (err, res) { });
 
         request(app)
             .post('/notblacklist')
@@ -85,27 +94,36 @@ describe('CSRF', function () {
             }
         });
 
-        app.post('/whitelist', function (req, res) {
+        app.post('/whitelist1', function (req, res) {
             res.send(200);
-		});
+        });
 
-		app.post('/anotherwhitelist', function (req, res) {
-			res.send(200);
-		});
+        app.post('/whitelist2', function (req, res) {
+            res.send(200);
+        });
+
+        app.post('/anotherwhitelist', function (req, res) {
+            res.send(200);
+        });
 
         app.post('/notwhitelist', function (req, res) {
             res.send(200);
         });
 
         request(app)
-            .post('/whitelist')
+            .post('/whitelist1')
             .expect(403)
-			.end(function (err, res) { });
+            .end(function (err, res) {});
 
-		request(app)
-			.post('/anotherwhitelist')
-			.expect(403)
-			.end(function (err, res) { });
+        request(app)
+            .post('/whitelist2')
+            .expect(403)
+            .end(function (err, res) { });
+
+        request(app)
+            .post('/anotherwhitelist')
+            .expect(403)
+            .end(function (err, res) { });
 
         request(app)
             .post('/notwhitelist')
