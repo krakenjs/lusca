@@ -100,9 +100,16 @@ Enables [Content Security Policy](https://www.owasp.org/index.php/Content_Securi
 
 See the [MDN CSP usage](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Using_Content_Security_Policy) page for more information on available policy options.
 
-### lusca.xframe(value)
+### lusca.xframe(options)
 
+Either
 * `value` String - Required. The value for the header, e.g. DENY, SAMEORIGIN or ALLOW-FROM uri.
+
+Or object `options` with following parameters, including `value` as before
+* `blocklist` Array or String - Optional. Allows defining a set of routes that will not set the `X-FRAME-OPTIONS` header to the specified value.  All others will.
+* `allowlist` Array or String - Optional. Allows defining a set of routes that will set the `X-FRAME-OPTIONS` header to the specified value.  All others will not.
+* `xframeFunction(req)` Function - Optional. Takes the request as a parameter and returns either the value for the header or false if the header should not be set for this route at this time.
+
 
 Enables X-FRAME-OPTIONS headers to help prevent [Clickjacking](https://www.owasp.org/index.php/Clickjacking).
 

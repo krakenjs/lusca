@@ -44,4 +44,84 @@ describe('XFRAME', function () {
             .expect(200, done);
     });
 
+    it('header (sameorigin) on allowlist', function (done) {
+        var config = { xframe: {value: 'SAMEORIGIN', allowlist: ['/']} },
+            app = mock(config);
+
+        app.get('/', function (req, res) {
+            res.status(200).end();
+        });
+
+        request(app)
+            .get('/')
+            .expect('X-FRAME-OPTIONS', config.xframe.value)
+            .expect(200, done);
+    });
+
+    it('header (sameorigin) not on allowlist', function (done) {
+        var config = { xframe: {value: 'SAMEORIGIN', allowlist: ['/test']} },
+            app = mock(config);
+
+        app.get('/', function (req, res) {
+            res.status(200).end();
+        });
+
+        request(app)
+            .get('/')
+            .expect(200)
+            .end(function (err, res) {
+                var isHeaderPresent = res.header['x-frame-options'] !== undefined;
+                assert(!isHeaderPresent);
+                done();
+            });
+    });
+
+    it('header (sameorigin) on blocklist', function (done) {
+        var config = { xframe: {value: 'SAMEORIGIN', blocklist: ['/']} },
+            app = mock(config);
+
+        app.get('/', function (req, res) {
+            res.status(200).end();
+        });
+
+        request(app)
+            .get('/')
+            .expect(200)
+            .end(function (err, res) {
+                var isHeaderPresent = res.header['x-frame-options'] !== undefined;
+                assert(!isHeaderPresent);
+                done();
+            });
+    });
+
+    it('header (sameorigin) not on blocklist', function (done) {
+        var config = { xframe: {value: 'SAMEORIGIN', blocklist: ['/test']} },
+            app = mock(config);
+
+        app.get('/', function (req, res) {
+            res.status(200).end();
+        });
+
+        request(app)
+            .get('/')
+            .expect('X-FRAME-OPTIONS', 'SAMEORIGIN')
+            .expect(200, done);
+    });
+
+    it('header function', function (done) {
+        var config = { xframe: {xframeFunction: function (req) {
+            return 'SAMEORIGIN';
+        } } },
+            app = mock(config);
+
+        app.get('/', function (req, res) {
+            res.status(200).end();
+        });
+
+        request(app)
+            .get('/')
+            .expect('X-FRAME-OPTIONS', 'SAMEORIGIN')
+            .expect(200, done);
+    });
+
 });
