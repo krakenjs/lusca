@@ -45,11 +45,11 @@ describe('CSRF', function () {
     it('should not require token on post to blocklist', function (done) {
         var app = mock({
             csrf: {
-                blocklist: ['/blocklist1', '/blocklist2']
+                blocklist: ['/blocklist1', '/blocklist2', '/']
             }
         });
 
-        app.post('/blocklist1', function (req, res) {
+        app.post('/', function (req, res) {
             res.send(200);
         });
 
@@ -62,7 +62,7 @@ describe('CSRF', function () {
         });
 
         request(app)
-            .post('/blocklist1')
+            .post('/')
             .expect(200)
             .end(function (err, res) {});
 
@@ -101,7 +101,7 @@ describe('CSRF', function () {
             .post('/allowlist1')
             .expect(403)
             .end(function (err, res) {});
-        
+
         request(app)
             .post('/allowlist2')
             .expect(403)
@@ -114,6 +114,35 @@ describe('CSRF', function () {
                 done(err);
             });
     });
+
+    it('csrf function', function (done) {
+        var config = { csrf: {csrfFunction: function (req) {
+            return false;
+        } } },
+            app = mock(config);
+
+        app.get('/', function (req, res) {
+            res.status(200).end();
+        });
+
+        request(app)
+            .post('/')
+            .expect(200);
+
+        var config1 = { csrf: {csrfFunction: function (req) {
+            return true;
+        } } },
+            app1 = mock(config1);
+
+        app1.get('/', function (req, res) {
+            res.status(200).end();
+        });
+
+        request(app1)
+            .post('/')
+            .expect(403, done);
+    });
+
     dd(sessionOptions, function () {
         it('GETs have a CSRF token (session type: {value})', function (ctx, done) {
             var mockConfig = (ctx.value === 'cookie') ? {
