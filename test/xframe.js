@@ -59,12 +59,24 @@ describe('XFRAME', function () {
     });
 
     it('header (sameorigin) not on allowlist', function (done) {
-        var config = { xframe: {value: 'SAMEORIGIN', allowlist: ['/test']} },
+        var config = { xframe: {value: 'SAMEORIGIN', allowlist: ['/allow']} },
             app = mock(config);
 
         app.get('/', function (req, res) {
             res.status(200).end();
         });
+
+        app.get('/allow', function (req, res) {
+            res.status(200).end();
+        });
+
+        request(app)
+            .get('/allow')
+            .expect(200)
+            .end(function (err, res) {
+                var isHeaderPresent = res.header['x-frame-options'] !== undefined;
+                assert(isHeaderPresent);
+            });
 
         request(app)
             .get('/')
@@ -77,12 +89,36 @@ describe('XFRAME', function () {
     });
 
     it('header (sameorigin) on blocklist', function (done) {
-        var config = { xframe: {value: 'SAMEORIGIN', blocklist: ['/']} },
+        var config = { xframe: {value: 'SAMEORIGIN', blocklist: ['/', '/block']} },
             app = mock(config);
 
         app.get('/', function (req, res) {
             res.status(200).end();
         });
+
+        app.get('/block', function (req, res) {
+            res.status(200).end();
+        });
+
+        app.get('/allow', function (req, res) {
+            res.status(200).end();
+        });
+
+        request(app)
+            .get('/block')
+            .expect(200)
+            .end(function (err, res) {
+                var isHeaderPresent = res.header['x-frame-options'] !== undefined;
+                assert(!isHeaderPresent);
+            });
+
+        request(app)
+            .get('/allow')
+            .expect(200)
+            .end(function (err, res) {
+                var isHeaderPresent = res.header['x-frame-options'] !== undefined;
+                assert(isHeaderPresent);
+            });
 
         request(app)
             .get('/')
@@ -95,7 +131,7 @@ describe('XFRAME', function () {
     });
 
     it('header (sameorigin) not on blocklist', function (done) {
-        var config = { xframe: {value: 'SAMEORIGIN', blocklist: ['/test']} },
+        var config = { xframe: {value: 'SAMEORIGIN', blocklist: ['/block']} },
             app = mock(config);
 
         app.get('/', function (req, res) {
