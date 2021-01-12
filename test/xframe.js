@@ -73,11 +73,7 @@ describe('XFRAME', function () {
         request(app)
             .get('/allow')
             .expect(200)
-            .expect('X-FRAME-OPTIONS', 'SAMEORIGIN')
-            .end(function (err, res) {
-                var isHeaderPresent = res.header['x-frame-options'] !== undefined;
-                assert(isHeaderPresent);
-            });
+            .expect('X-FRAME-OPTIONS', 'SAMEORIGIN');
 
         request(app)
             .get('/')
