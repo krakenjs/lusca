@@ -73,6 +73,7 @@ describe('XFRAME', function () {
         request(app)
             .get('/allow')
             .expect(200)
+            .expect('X-FRAME-OPTIONS', 'SAMEORIGIN')
             .end(function (err, res) {
                 var isHeaderPresent = res.header['x-frame-options'] !== undefined;
                 assert(isHeaderPresent);
@@ -130,8 +131,8 @@ describe('XFRAME', function () {
             });
     });
 
-    it('header (sameorigin) not on blocklist', function (done) {
-        var config = { xframe: {value: 'SAMEORIGIN', blocklist: ['/block']} },
+    it('header (sameorigin) not on string blocklist', function (done) {
+        var config = { xframe: {value: 'SAMEORIGIN', blocklist: '/block'} },
             app = mock(config);
 
         app.get('/', function (req, res) {
@@ -141,23 +142,47 @@ describe('XFRAME', function () {
         request(app)
             .get('/')
             .expect('X-FRAME-OPTIONS', 'SAMEORIGIN')
-            .expect(200, done);
+            .expect(200);
+
+        request(app)
+            .get('/block')
+            .end(function (err, res) {
+                var headerNotPresent = res.header['x-frame-options'] === undefined;
+                assert(headerNotPresent);
+                done();
+            });
     });
 
     it('header function', function (done) {
-        var config = { xframe: {xframeFunction: function (req) {
+        var configTrue = { xframe: {xframeFunction: function (req) {
             return 'SAMEORIGIN';
         } } },
-            app = mock(config);
+            configFalse = { xframe: {xframeFunction: function (req) {
+                return false;
+            } } },
+            app = mock(configTrue),
+            app2 = mock(configFalse);
 
         app.get('/', function (req, res) {
+            res.status(200).end();
+        });
+
+        app2.get('/', function (req, res) {
             res.status(200).end();
         });
 
         request(app)
             .get('/')
             .expect('X-FRAME-OPTIONS', 'SAMEORIGIN')
-            .expect(200, done);
+            .expect(200);
+
+        request(app2)
+            .get('/')
+            .end(function (err, res) {
+                var headerNotPresent = res.header['x-frame-options'] === undefined;
+                assert(headerNotPresent);
+                done();
+            });
     });
 
 });

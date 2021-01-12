@@ -62,7 +62,7 @@ __Please note that you must use [express-session](https://github.com/expressjs/s
 * `angular` Boolean - Optional. Shorthand setting to set `lusca` up to use the default settings for CSRF validation according to the [AngularJS docs]. Can be used with `cookie.options`.
 * `blocklist` Array or String - Optional. Allows defining a set of routes that will not have csrf protection.  All others will.
 * `allowlist` Array or String - Optional. Allows defining a set of routes that will have csrf protection.  All others will not.
-* `csrfFunction` Function - Returns `true` if route should require a token or `false` if route should not require a token.
+* `csrfFunction` Function - Optional. Returns `true` if route should require a token or `false` if route should not require a token.
 
 Notes: The app can use either a `blocklist`, an `allowlist`, or a `csrfFunction`, only one.  By default, all post routes are allowlisted.
 

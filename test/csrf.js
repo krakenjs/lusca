@@ -67,6 +67,11 @@ describe('CSRF', function () {
             .end(function (err, res) {});
 
         request(app)
+            .post('/blocklist1')
+            .expect(200)
+            .end(function (err, res) {});
+
+        request(app)
             .post('/blocklist2')
             .expect(200)
             .end(function (err, res) {});
@@ -121,29 +126,6 @@ describe('CSRF', function () {
             .expect(403)
             .end(function (err, res) {
                 done(err);
-            });
-    });
-
-    it('should only require token on post to whitelist 2', function (done) {
-        var app = mock({
-            csrf: {
-                whitelist: ['/api/buttons', '/api/data']
-            }
-        });
-
-        app.post('/api/buttons', function (req, res) {
-            res.send(200);
-        });
-
-        request(app)
-            .post('/api/buttons')
-            .expect(403)
-            .end(function (err, res) {
-                if (err) {
-                    done(err);
-                } else {
-                    done();
-                }
             });
     });
 
