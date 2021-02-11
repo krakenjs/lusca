@@ -60,12 +60,21 @@ __Please note that you must use [express-session](https://github.com/expressjs/s
 * `cookie.name` String - Required if cookie is an object and `angular` is not true. The CSRF cookie name to set.
 * `cookie.options` Object - Optional. A valid Express cookie options object.
 * `angular` Boolean - Optional. Shorthand setting to set `lusca` up to use the default settings for CSRF validation according to the [AngularJS docs]. Can be used with `cookie.options`.
-* `blocklist` Array or String - Optional. Allows defining a set of routes that will not have csrf protection.  All others will.
-* `allowlist` Array or String - Optional. Allows defining a set of routes that will have csrf protection.  All others will not.
-* `csrfFunction` Function - Optional. Returns `true` if route should require a token or `false` if route should not require a token.
+* `blocklist` Array or String - Optional. Allows defining a set of routes that will not have csrf protection.  All others will.  
+Example configuration:
+  ```
+  blocklist: [{path: '/details', type: 'exact'}, {path: '/summary', type: 'includes'}]
+  //If match type is 'exact', route will get blocklisted only if it matches req.path exactly
+  //If match type is 'includes', Lusca will check if req.path starts with the specified path
 
-Notes: The app can use either a `blocklist`, an `allowlist`, or a `csrfFunction`, only one.  By default, all post routes are allowlisted.
+  For backwards compatiblity, following configuration is supported as well. It will be evaluated using the 'includes' match type.
+  blocklist: '/details';
+  blocklist: ['/details', '/summary'];
+  ```
+* `allowlist` Array or String - Optional. Allows defining a set of routes that will have csrf protection.  All others will not.  
+Configuration is similar to `blocklist` config
 
+Notes: The app can use either a `blocklist` or a `allowlist`, not both.  By default, all post routes are allowlisted.
 
 [angularjs docs]: https://docs.angularjs.org/api/ng/service/$http#cross-site-request-forgery-xsrf-protection
 
@@ -102,16 +111,9 @@ Enables [Content Security Policy](https://www.owasp.org/index.php/Content_Securi
 
 See the [MDN CSP usage](https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Using_Content_Security_Policy) page for more information on available policy options.
 
-### lusca.xframe(options)
+### lusca.xframe(value)
 
-Either
 * `value` String - Required. The value for the header, e.g. DENY, SAMEORIGIN or ALLOW-FROM uri.
-
-Or object `options` with following parameters, including `value` as before
-* `blocklist` Array or String - Optional. Allows defining a set of routes that will not set the `X-FRAME-OPTIONS` header to the specified value.  All others will.
-* `allowlist` Array or String - Optional. Allows defining a set of routes that will set the `X-FRAME-OPTIONS` header to the specified value.  All others will not.
-* `xframeFunction(req)` Function - Optional. Takes the request as a parameter and returns either the value for the header or false if the header should not be set for this route at this time.
-
 
 Enables X-FRAME-OPTIONS headers to help prevent [Clickjacking](https://www.owasp.org/index.php/Clickjacking).
 
