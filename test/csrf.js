@@ -45,7 +45,7 @@ describe('CSRF', function () {
     it('should not require token on post to blocklist', function (done) {
         var app = mock({
             csrf: {
-                blocklist: ['/blocklist1', { path: '/blocklist2', type: 'includes' }, { path: '/', type: 'exact' }]
+                blocklist: ['/blocklist1', { path: '/blocklist2', type: 'startsWith' }, { path: '/', type: 'exact' }]
             }
         });
 
@@ -117,7 +117,7 @@ describe('CSRF', function () {
     it('should only require token on post to allowlist', function (done) {
         var app = mock({
             csrf: {
-                allowlist: ['/allowlist1', { path: '/allowlist2', type: 'includes' }, { path: '/', type: 'exact' }]
+                allowlist: ['/allowlist1', { path: '/allowlist2', type: 'startsWith' }, { path: '/', type: 'exact' }]
             }
         });
 
@@ -150,7 +150,9 @@ describe('CSRF', function () {
         request(app)
             .post('/notallowlist')
             .expect(200)
-            .end(function (err, res) {});
+            .end(function (err, res) {
+                console.log(err);
+            });
 
         request(app)
             .post('/')
