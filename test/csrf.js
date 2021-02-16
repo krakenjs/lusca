@@ -188,6 +188,25 @@ describe('CSRF', function () {
                 done(err);
             });
     });
+
+    it('should throw error on invalid allowlist/blocklist config', function() {
+        assert.throws(function() {
+            mock({
+                csrf: {
+                    allowlist: [{ path: '/allowInvalid', type: 'regex' }]
+                }
+            });
+        }, /Invalid csrf config. type 'regex' is not supported.*/);
+
+        assert.throws(function() {
+            mock({
+                csrf: {
+                    allowlist: [{ path: '', type: 'startsWith' }]
+                }
+            });
+        }, /Invalid csrf config. path is required/);
+    });
+
     dd(sessionOptions, function () {
         it('GETs have a CSRF token (session type: {value})', function (ctx, done) {
             var mockConfig = (ctx.value === 'cookie') ? {
