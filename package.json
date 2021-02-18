@@ -37,7 +37,7 @@
     "express-session": "^1.7.5",
     "grunt": "^0.4.5",
     "grunt-cli": "^1.2.0",
-    "grunt-contrib-jshint": "^0.7.0",
+    "grunt-contrib-jshint": "^3.0.0",
     "grunt-mocha-test": "^0.7.0",
     "jshint": "*",
     "supertest": "^0.13.0"

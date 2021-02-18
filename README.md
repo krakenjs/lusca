@@ -60,8 +60,19 @@ __Please note that you must use [express-session](https://github.com/expressjs/s
 * `cookie.name` String - Required if cookie is an object and `angular` is not true. The CSRF cookie name to set.
 * `cookie.options` Object - Optional. A valid Express cookie options object.
 * `angular` Boolean - Optional. Shorthand setting to set `lusca` up to use the default settings for CSRF validation according to the [AngularJS docs]. Can be used with `cookie.options`.
-* `blocklist` Array or String - Optional. Allows defining a set of routes that will not have csrf protection.  All others will.
-* `allowlist` Array or String - Optional. Allows defining a set of routes that will have csrf protection.  All others will not.
+* `blocklist` Array or String - Optional. Allows defining a set of routes that will not have csrf protection.  All others will.  
+Example configuration:
+  ```
+  blocklist: [{path: '/details', type: 'exact'}, {path: '/summary', type: 'startWith'}]
+  //If match type is 'exact', route will get blocklisted only if it matches req.path exactly
+  //If match type is 'startsWith', Lusca will check if req.path starts with the specified path
+
+  For backwards compatiblity, following configuration is supported as well. It will be evaluated using the 'startsWith' match type.
+  blocklist: '/details';
+  blocklist: ['/details', '/summary'];
+  ```
+* `allowlist` Array or String - Optional. Allows defining a set of routes that will have csrf protection.  All others will not.  
+Configuration is similar to `blocklist` config
 
 Notes: The app can use either a `blocklist` or a `allowlist`, not both.  By default, all post routes are allowlisted.
 

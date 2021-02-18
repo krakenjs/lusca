@@ -45,7 +45,7 @@ describe('CSRF', function () {
     it('should not require token on post to blocklist', function (done) {
         var app = mock({
             csrf: {
-                blocklist: ['/blocklist1', '/blocklist2']
+                blocklist: ['/blocklist1', { path: '/blocklist2', type: 'startsWith' }, { path: '/', type: 'exact' }]
             }
         });
 
@@ -58,6 +58,10 @@ describe('CSRF', function () {
         });
 
         app.post('/notblocklist', function (req, res) {
+            res.send(200);
+        });
+
+        app.post('/', function (req, res) {
             res.send(200);
         });
 
@@ -74,6 +78,38 @@ describe('CSRF', function () {
         request(app)
             .post('/notblocklist')
             .expect(403)
+            .end(function (err, res) {});
+
+        request(app)
+            .post('/')
+            .expect(200)
+            .end(function (err, res) {
+                done(err);
+            });
+    });
+    it('should not require token on post to blocklist (string config)', function (done) {
+        var app = mock({
+            csrf: {
+                blocklist: '/blocklist1'
+            }
+        });
+
+        app.post('/blocklist1', function (req, res) {
+            res.send(200);
+        });
+
+        app.post('/notblocklist', function (req, res) {
+            res.send(200);
+        });
+
+        request(app)
+            .post('/blocklist1')
+            .expect(200)
+            .end(function (err, res) {});
+
+        request(app)
+            .post('/notblocklist')
+            .expect(403)
             .end(function (err, res) {
                 done(err);
             });
@@ -81,7 +117,7 @@ describe('CSRF', function () {
     it('should only require token on post to allowlist', function (done) {
         var app = mock({
             csrf: {
-                allowlist: ['/allowlist1', '/allowlist2']
+                allowlist: ['/allowlist1', { path: '/allowlist2', type: 'startsWith' }, { path: '/', type: 'exact' }]
             }
         });
 
@@ -97,13 +133,51 @@ describe('CSRF', function () {
             res.send(200);
         });
 
+        app.post('/', function (req, res) {
+            res.send(200);
+        });
+
         request(app)
             .post('/allowlist1')
             .expect(403)
             .end(function (err, res) {});
-        
+
         request(app)
             .post('/allowlist2')
+            .expect(403)
+            .end(function (err, res) {});
+
+        request(app)
+            .post('/notallowlist')
+            .expect(200)
+            .end(function (err, res) {
+                console.log(err);
+            });
+
+        request(app)
+            .post('/')
+            .expect(200)
+            .end(function (err, res) {
+                done(err);
+            });
+    });
+    it('should only require token on post to allowlist (string config)', function (done) {
+        var app = mock({
+            csrf: {
+                allowlist: '/allowlist1'
+            }
+        });
+
+        app.post('/allowlist1', function (req, res) {
+            res.send(200);
+        });
+
+        app.post('/notallowlist', function (req, res) {
+            res.send(200);
+        });
+
+        request(app)
+            .post('/allowlist1')
             .expect(403)
             .end(function (err, res) {});
 
@@ -114,6 +188,25 @@ describe('CSRF', function () {
                 done(err);
             });
     });
+
+    it('should throw error on invalid allowlist/blocklist config', function() {
+        assert.throws(function() {
+            mock({
+                csrf: {
+                    allowlist: [{ path: '/allowInvalid', type: 'regex' }]
+                }
+            });
+        }, /Invalid csrf config. type 'regex' is not supported.*/);
+
+        assert.throws(function() {
+            mock({
+                csrf: {
+                    allowlist: [{ path: '', type: 'startsWith' }]
+                }
+            });
+        }, /Invalid csrf config. path is required/);
+    });
+
     dd(sessionOptions, function () {
         it('GETs have a CSRF token (session type: {value})', function (ctx, done) {
             var mockConfig = (ctx.value === 'cookie') ? {

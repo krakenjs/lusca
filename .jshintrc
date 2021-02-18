@@ -42,8 +42,8 @@
 
     // ECMAScript 5
 
-    // Whether ES5 syntax should be allowed.
-    //"es5": true,
+    // Whether ES6 syntax should be allowed.
+    "esversion": 6,
     // Whether the "use strict"; pragma should be required.
     "strict": false,
     // Whether global "use strict"; should be allowed (also enables strict).
