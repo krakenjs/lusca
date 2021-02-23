@@ -1,9 +1,9 @@
 ##### Unreleased
 
+##### v1.7.0
+
 * Changes `whitelist`/`blacklist` to `allowlist`/`blocklist` to follow [guidelines](https://chromium.googlesource.com/chromium/src/+/master/styleguide/inclusive_code.md#racially-neutral)
 * Updates `allowlist`, `blocklist` csrf config to allow specifying the type of match required
-
-
 
 ##### v1.6.1
 
