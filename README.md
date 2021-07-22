@@ -138,8 +138,8 @@ Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_St
 
 ### lusca.xssProtection(options)
 
-* `options.enabled` Boolean - Optional. If the header is enabled or not (see header docs). Defaults to `1`.
-* `options.mode` String - Optional. Mode to set on the header (see header docs). Defaults to `block`.
+* `options.enabled` Boolean - Optional. If the header is enabled or not (see header docs). Defaults to `0`.
+* `options.mode` String - Optional. Mode to set on the header (see header docs). Defaults to ``.
 
 Enables [X-XSS-Protection](http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-security-part-iv-the-xss-filter.aspx) headers to help prevent cross site scripting (XSS) attacks in older IE browsers (IE8)
 
