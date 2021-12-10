@@ -114,6 +114,27 @@ describe('CSRF', function () {
                 done(err);
             });
     });
+    it('should set token on response on post to blocklist (string config)', function (done) {
+        var app = mock({
+            csrf: {
+                blocklist: '/blocklist1'
+            }
+        });
+
+        app.post('/blocklist1', function (req, res) {
+            res.status(200).send({
+                token: res.locals._csrf
+            });
+        });
+
+        request(app)
+            .post('/blocklist1')
+            .expect(200)
+            .end(function (err, res) {
+                assert(res.body.token);
+                done(err);
+            });
+    });
     it('should only require token on post to allowlist', function (done) {
         var app = mock({
             csrf: {
