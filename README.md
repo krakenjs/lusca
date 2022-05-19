@@ -95,7 +95,7 @@ Furthermore, parsers must be registered before lusca.
 * `options.styleNonce` Boolean - Enable nonce for inline style-src, access from `res.locals.nonce`
 * `options.scriptNonce` Boolean - Enable nonce for inline script-src, access from `res.locals.nonce`
 
-Enables [Content Security Policy](https://www.owasp.org/index.php/Content_Security_Policy) (CSP) headers.
+Enables [Content Security Policy](https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html) (CSP) headers.
 
 #### Example Options
 
@@ -115,7 +115,7 @@ See the [MDN CSP usage](https://developer.mozilla.org/en-US/docs/Web/Security/CS
 
 * `value` String - Required. The value for the header, e.g. DENY, SAMEORIGIN or ALLOW-FROM uri.
 
-Enables X-FRAME-OPTIONS headers to help prevent [Clickjacking](https://www.owasp.org/index.php/Clickjacking).
+Enables X-FRAME-OPTIONS headers to help prevent [Clickjacking](https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html).
 
 
 
@@ -133,7 +133,7 @@ Enables [Platform for Privacy Preferences Project](https://www.w3.org/P3P) (P3P)
 * `options.includeSubDomains` Boolean - Optional. Applies HSTS to all subdomains of the host
 * `options.preload` Boolean - Optional. Adds preload flag
 
-Enables [HTTP Strict Transport Security](https://www.owasp.org/index.php/HTTP_Strict_Transport_Security) for the host domain. The preload flag is required for HSTS domain submissions to [Chrome's HSTS preload list](https://hstspreload.appspot.com).
+Enables [HTTP Strict Transport Security](https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html) for the host domain. The preload flag is required for HSTS domain submissions to [Chrome's HSTS preload list](https://hstspreload.appspot.com).
 
 
 ### lusca.xssProtection(options)
