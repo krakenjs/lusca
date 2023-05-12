@@ -63,7 +63,7 @@ __Please note that you must use [express-session](https://github.com/expressjs/s
 * `blocklist` Array or String - Optional. Allows defining a set of routes that will not have csrf protection.  All others will.  
 Example configuration:
   ```
-  blocklist: [{path: '/details', type: 'exact'}, {path: '/summary', type: 'startWith'}]
+  blocklist: [{path: '/details', type: 'exact'}, {path: '/summary', type: 'startsWith'}]
   //If match type is 'exact', route will get blocklisted only if it matches req.path exactly
   //If match type is 'startsWith', Lusca will check if req.path starts with the specified path
 
